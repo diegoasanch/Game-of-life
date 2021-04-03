@@ -1,24 +1,109 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { dark } from '../../styles/colors'
 import SizeInput from '../SizeInput'
-import { Label, Button, ButtonGroup, Position, H1, H3, Divider } from "@blueprintjs/core";
+import { Label, Button, ButtonGroup, Position, H1, H3, H4, Divider, Switch, Alignment, Icon, H6 } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
 import { numInputCallback, SetNumValue } from '../../types/inputs'
 import SpeedInput from '../SpeedInput'
+import { CurrentTheme } from '../../context/theme'
+import { IthemeProp } from '../../types/styles'
+import packageJson from '../../../package.json';
 
-const Container = styled.div`
-    min-width: 250px;
+const Container = styled.div<IthemeProp>`
+    position: relative;
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: ${dark.sidebar};
-    padding: 10px;
+    background-color: ${props => props.theme.sidebar};
+    padding: 8px;
     align-items: center;
-    justify-content: space-around;
+    justify-content: stretch;
+`
+const Stats = styled.footer`
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-self: end;
+    margin-top: 10px;
+    width: 90%;
+
+    .divider {
+        margin-bottom: 10px;
+    }
+`
+
+const Count = styled.span`
+    color: ${dark.header};
+`
+const StyledHeader = styled(H1)`
+    font-size: 4em !important;
+    line-height: .9em !important;
+    font-weight: bold;
+    align-self: flex-start;
+`
+const HeaderContainer = styled.header`
+    position: relative;
+    width: 100%;
+`
+const StyledDivider = styled(Divider)`
+    width: 100%;
+`
+const Settings = styled.div<IthemeProp>`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    width: 100%;
+    margin-right: 5px;
 
     > * {
-        margin: 1em 0;
+        margin: .5em 0;
+    }
+    &::-webkit-scrollbar {
+        display: none;
+        background-color: ${props => props.theme.scrollBarBg};
+        width: 5px;
+        height: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: ${props => props.theme.scrollBarThumb};
+    }
+    &:hover {
+        margin-right: 0;
+        &::-webkit-scrollbar {
+            display: contents;
+        }
+    }
+`
+const StyledSwitch = styled(Switch)`
+    position: absolute;
+    bottom: 0;
+    right: 0;
+`
+const SectionHeader = styled(H3)`
+    align-self: flex-flex-start;
+`
+const InlineIcon = styled(Icon)`
+    display: inline-block;
+    vertical-align: super;
+    margin-left: .2em;
+`
+const TooltipContent = styled.div`
+    width: 40vw;
+    max-width: 1000px;
+    min-width: 500px;
+    padding: 1em;
+`
+const Shoutout = styled(H6)`
+    font-size: .9em !important;
+
+    a &:not(:hover) {
+        color: inherit;
     }
 `
 
@@ -32,22 +117,34 @@ interface Iprops {
     isPlaying: boolean,
     iterationCount: number,
     iterateOnce: () => void,
-    resetBoard: (random: boolean | undefined) => void,
+    resetBoard: (random: boolean | undefined, heart: boolean | undefined) => void,
     togglePlaying: () => void,
+    readonly isDark: boolean,
+    toggleTheme: () => void,
 }
 
-const Stats = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-self: flex-end;
-`
+const HeaderTooltip = (
+    <TooltipContent>
+        <h1>Conway's Game of Life <span className="bp3-text-muted">&emsp;- v{packageJson.version}</span></h1>
+        <p>
+            &emsp; Is a <strong>cellular automaton</strong> devised by the
+            British mathematician John
+            Horton Conway in 1970. It is a zero-player game, meaning that its
+            evolution is determined by its initial state, requiring no further
+            input.<br/>
+            &emsp; One interacts with the Game of Life by creating an initial
+            configuration and observing how it evolves.
 
-const Count = styled.span`
-    color: ${dark.header};
-`
-
-
+        </p>
+        <h2>Rules</h2>
+        <ul>
+            <li>Any live cell with fewer than two live neighbours dies, as if by underpopulation.</li>
+            <li>Any live cell with two or three live neighbours lives on to the next generation.</li>
+            <li>Any live cell with more than three live neighbours dies, as if by overpopulation.</li>
+            <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
+        </ul>
+    </TooltipContent>
+)
 
 const Sidebar = ({
     rows,
@@ -61,76 +158,127 @@ const Sidebar = ({
     togglePlaying,
     resetBoard,
     iterationCount,
+    isDark,
+    toggleTheme,
 }: Iprops) => {
+
+    const theme = useContext(CurrentTheme)
+
     const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         iterateOnce()
     }
 
-    return (
-        <Container>
-            <H1>Game of Life</H1>
-            <Divider />
-            <Label>
-                Columns
-                <SizeInput
-                    value={cols}
-                    maxValue={50}
-                    placeholder="Column count"
-                    handleInput={setCols}
-                />
-            </Label>
-            <Label>
-                Rows
-                <SizeInput
-                    value={rows}
-                    maxValue={50}
-                    placeholder="Row count"
-                    handleInput={setRows}
-                />
-            </Label>
-            <Label>
-                Speed
-                <span className="bp3-text-muted"> (Hz)</span>
-                <SpeedInput
-                    value={speed}
-                    setValue={setSpeed}
-                />
-            </Label>
-            <ButtonGroup>
-                <Tooltip2 content="Reset board" position={Position.TOP}>
-                    <Button
-                        // text="reset"
-                        onClick={() => resetBoard(false)}
-                        icon="reset"
-                        intent="danger"
-                        />
-                </Tooltip2>
-                <Tooltip2 content="Randomize cells" position={Position.TOP}>
-                    <Button
-                        // text="reset"
-                        onClick={() => resetBoard(true)}
-                        icon="random"
-                    />
-                </Tooltip2>
-                <Tooltip2 content="Start iterating" position={Position.TOP}>
-                    <Button
-                        text={isPlaying ? "Pause" : "Play"}
-                        icon={isPlaying ? "pause" : "play"}
-                        intent="primary"
-                        onClick={togglePlaying}
-                    />
-                </Tooltip2>
-                <Tooltip2 content="Step-by-step" position={Position.TOP}>
-                    <Button
-                        rightIcon="step-forward"
-                        // intent="success"
-                        onClick={handleClick}
-                    />
-                </Tooltip2>
 
-            </ButtonGroup>
+    return (
+        <Container theme={theme}>
+
+            <HeaderContainer>
+                <Tooltip2 content={HeaderTooltip} position={Position.RIGHT}>
+                    <StyledHeader>
+                        Game <br/>
+                        of <br/>
+                        Life
+                        <InlineIcon icon="info-sign" intent="primary"/>
+                    </StyledHeader>
+                </Tooltip2>
+                <StyledSwitch
+                    alignIndicator={Alignment.RIGHT}
+                    checked={isDark}
+                    onChange={toggleTheme}
+                    innerLabel="🌞"
+                    innerLabelChecked="🌚"
+                    large
+                />
+            </HeaderContainer>
+
+            <StyledDivider />
+
+            <Settings theme={theme}>
+
+
+                <SectionHeader>Settings</SectionHeader>
+                <Label>
+                    Columns
+                    <SizeInput
+                        value={cols}
+                        maxValue={250}
+                        placeholder="Column count"
+                        handleInput={setCols}
+                    />
+                </Label>
+                <Label>
+                    Rows
+                    <SizeInput
+                        value={rows}
+                        maxValue={250}
+                        placeholder="Row count"
+                        handleInput={setRows}
+                    />
+                </Label>
+                <Label>
+                    Iteration Speed
+                    <span className="bp3-text-muted"> (Hz)</span>
+                    <SpeedInput
+                        value={speed}
+                        setValue={setSpeed}
+                    />
+                </Label>
+
+                <ButtonGroup large>
+                    <Tooltip2 content={`${isPlaying ? 'Stop': 'Start'} iterating`} position={Position.TOP}>
+                        <Button
+                            text={isPlaying ? "Pause" : "Play"}
+                            icon={isPlaying ? "pause" : "play"}
+                            intent="primary"
+                            onClick={togglePlaying}
+                        />
+                    </Tooltip2>
+                    <Tooltip2 content="Step-by-step" position={Position.TOP}>
+                        <Button
+                            rightIcon="step-forward"
+                            onClick={handleClick}
+                            disabled={isPlaying}
+                        />
+                    </Tooltip2>
+
+                </ButtonGroup>
+                <ButtonGroup>
+                    <Tooltip2 content="Reset board" position={Position.TOP}>
+                        <Button
+                            onClick={() => resetBoard(false, true)}
+                            icon="reset"
+                            intent="danger"
+                        />
+                    </Tooltip2>
+                    <Tooltip2 content="Clear board" position={Position.TOP}>
+                        <Button
+                            onClick={() => resetBoard(false, false)}
+                            icon="eraser"
+                        />
+                    </Tooltip2>
+                    <Tooltip2 content="Randomize cells" position={Position.TOP}>
+                        <Button
+                            text="Random"
+                            onClick={() => resetBoard(true, false)}
+                            icon="random"
+                        />
+                    </Tooltip2>
+                </ButtonGroup>
+            </Settings>
+
+
             <Stats>
-                <H3>Iteration count: <Count>{iterationCount}</Count></H3>
+                <StyledDivider className="divider" />
+                {/* <SectionHeader>Info</SectionHeader> */}
+
+                <H4>Iteration count: <Count>{iterationCount}</Count></H4>
+                <Shoutout className="bp3-text-muted">
+                    Made with 💖 by &nbsp;
+                    <a href="https://github.com/diegoasanch" target="_blank" rel="noopener noreferrer">
+                        Diego.
+                    </a>
+                </Shoutout>
+
             </Stats>
         </Container>
     )

@@ -1,14 +1,15 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { dark } from '../../styles/colors'
 import { cellContent } from '../../types/cells'
 import { ToggleCellState } from '../../context/game'
+import { CurrentTheme } from '../../context/theme'
+import { IthemeProp } from '../../types/styles'
 
-const StyledCell = styled.div<cellContent>`
+const StyledCell = styled.div<cellContent & IthemeProp>`
     height: 20px;
     width: 20px;
-    background-color: ${props => props.alive ? dark.cellAlive : dark.cellDead};
-    border: solid 1px #000;
+    background-color: ${props => props.alive ? props.theme.cellAlive : props.theme.cellDead};
+    border: solid 1px ${props => props.theme.cellBorder};
 `
 
 type Iprops = {
@@ -17,6 +18,7 @@ type Iprops = {
 
 const Cell = ({ cellData }: Iprops ) => {
     const toggleCell = useContext(ToggleCellState)
+    const theme = useContext(CurrentTheme)
 
     const handleClick = () => {
         toggleCell(cellData.column, cellData.row)
@@ -26,6 +28,7 @@ const Cell = ({ cellData }: Iprops ) => {
         <StyledCell
             {...cellData}
             onClick={handleClick}
+            theme={theme}
         />
     )
 }

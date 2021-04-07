@@ -20,7 +20,7 @@ const Container = styled.div<IthemeProp>`
     align-items: center;
     justify-content: stretch;
 `
-const Stats = styled.footer`
+const Stats = styled.footer<IthemeProp>`
     position: absolute;
     bottom: 5px;
     left: 10px;
@@ -31,6 +31,10 @@ const Stats = styled.footer`
     justify-self: end;
     margin-top: 10px;
     width: 90%;
+    height: 5em;
+
+    background-color: ${props => props.theme.sidebar};
+    z-index: 34;
 
     .divider {
         margin-bottom: 10px;
@@ -57,15 +61,16 @@ const Settings = styled.div<IthemeProp>`
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: 100%;
-    margin-right: 5px;
+    margin-bottom: 4.5em;
+    /* margin-right: 5px; */
 
     > * {
         margin: .5em 0;
     }
     &::-webkit-scrollbar {
-        display: none;
+        /* display: none; */
         background-color: ${props => props.theme.scrollBarBg};
         width: 5px;
         height: 5px;
@@ -73,12 +78,12 @@ const Settings = styled.div<IthemeProp>`
     &::-webkit-scrollbar-thumb {
         background-color: ${props => props.theme.scrollBarThumb};
     }
-    &:hover {
+    /* &:hover {
         margin-right: 0;
         &::-webkit-scrollbar {
             display: contents;
         }
-    }
+    } */
 `
 const StyledSwitch = styled(Switch)`
     position: absolute;
@@ -106,6 +111,17 @@ const Shoutout = styled(H6)`
         color: inherit;
     }
 `
+const SizeInputRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-items: center;
+    align-items: center;
+
+    > * {
+        padding: 0 5%;
+    }
+`
 
 interface Iprops {
     rows: number,
@@ -121,11 +137,13 @@ interface Iprops {
     togglePlaying: () => void,
     readonly isDark: boolean,
     toggleTheme: () => void,
+    readonly highlightNew: boolean,
+    toggleHighlightNew: () => void,
 }
 
 const HeaderTooltip = (
     <TooltipContent>
-        <h1>Conway's Game of Life <span className="bp3-text-muted">&emsp;- v{packageJson.version}</span></h1>
+        <h1>Conway's Game of Life <span className="bp3-text-muted"> - v{packageJson.version}</span></h1>
         <p>
             &emsp; Is a <strong>cellular automaton</strong> devised by the
             British mathematician John
@@ -135,6 +153,14 @@ const HeaderTooltip = (
             &emsp; One interacts with the Game of Life by creating an initial
             configuration and observing how it evolves.
 
+        </p>
+        <h2>How to play?</h2>
+        <p>
+            &emsp; Click on a cell to change its state. Change as many cells as you want and
+            press <strong><Icon icon="play"/> Play</strong>!
+            <br/>
+            &emsp; Alternatively, click the <strong><Icon icon="step-forward"/> Step by step </strong>
+            button to evolve the board one cycle at a time.
         </p>
         <h2>Rules</h2>
         <ul>
@@ -160,6 +186,8 @@ const Sidebar = ({
     iterationCount,
     isDark,
     toggleTheme,
+    highlightNew,
+    toggleHighlightNew,
 }: Iprops) => {
 
     const theme = useContext(CurrentTheme)
@@ -195,26 +223,35 @@ const Sidebar = ({
 
             <Settings theme={theme}>
 
-
                 <SectionHeader>Settings</SectionHeader>
-                <Label>
-                    Columns
-                    <SizeInput
-                        value={cols}
-                        maxValue={250}
-                        placeholder="Column count"
-                        handleInput={setCols}
-                    />
-                </Label>
-                <Label>
-                    Rows
-                    <SizeInput
-                        value={rows}
-                        maxValue={250}
-                        placeholder="Row count"
-                        handleInput={setRows}
-                    />
-                </Label>
+
+                <Switch
+                    alignIndicator={Alignment.RIGHT}
+                    checked={highlightNew}
+                    onChange={toggleHighlightNew}
+                    label="Highlight new cells"
+                    // large
+                />
+                <SizeInputRow>
+                    <Label>
+                        Rows
+                        <SizeInput
+                            value={rows}
+                            maxValue={250}
+                            placeholder="Row count"
+                            handleInput={setRows}
+                        />
+                    </Label>
+                    <Label>
+                        Columns
+                        <SizeInput
+                            value={cols}
+                            maxValue={250}
+                            placeholder="Column count"
+                            handleInput={setCols}
+                        />
+                    </Label>
+                </SizeInputRow>
                 <Label>
                     Iteration Speed
                     <span className="bp3-text-muted"> (Hz)</span>
@@ -267,13 +304,13 @@ const Sidebar = ({
             </Settings>
 
 
-            <Stats>
+            <Stats theme={theme}>
                 <StyledDivider className="divider" />
                 {/* <SectionHeader>Info</SectionHeader> */}
 
                 <H4>Iteration count: <Count>{iterationCount}</Count></H4>
                 <Shoutout className="bp3-text-muted">
-                    Made with 💖 by &nbsp;
+                    Made with 💖 by&nbsp;
                     <a href="https://github.com/diegoasanch" target="_blank" rel="noopener noreferrer">
                         Diego.
                     </a>

@@ -32,10 +32,11 @@ const Row = styled.div`
 `
 
 interface Iprops {
-    rows: cellContent[][] | undefined
+    rows: cellContent[][] | undefined,
+    highlightNew: boolean,
 }
 
-const CellGrid = ({ rows }: Iprops) => {
+const CellGrid = ({ rows, highlightNew }: Iprops) => {
     const theme = useContext(CurrentTheme)
 
     return (
@@ -47,7 +48,7 @@ const CellGrid = ({ rows }: Iprops) => {
                                 <Cell
                                     key={`cell_${cell.row}_${cell.column}`}
                                     cellData={cell}
-
+                                    highlightNew={highlightNew}
                                 />
                             ))}
                         </Row>

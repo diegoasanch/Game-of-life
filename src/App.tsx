@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { dark, light } from './styles/colors'
 import { CurrentTheme } from './context/theme'
 import Game from './pages/Game'
 import styled from 'styled-components'
-import { FocusStyleManager } from "@blueprintjs/core";
+import { FocusStyleManager, HotkeysProvider } from "@blueprintjs/core";
+import { useLocalStorage } from 'react-use'
 
 FocusStyleManager.onlyShowFocusOnTabs();
 
@@ -13,18 +14,20 @@ const Page = styled.div`
 `
 
 function App() {
-  const [isDark, setIsDark] = useState(true)
+  const [isDark, setIsDark] = useLocalStorage('isDark', true)
 
   const toggleTheme = () => {
-    setIsDark(prev => !prev)
+    setIsDark(!isDark)
   }
 
   return (
-    <CurrentTheme.Provider value={isDark ? dark : light}>
-      <Page className={`.bp3-ui-text ${isDark ? 'bp3-dark' : ''}`}>
-        <Game isDark={isDark} toggleTheme={toggleTheme} />
-      </Page>
-    </CurrentTheme.Provider>
+    <HotkeysProvider>
+      <CurrentTheme.Provider value={isDark ? dark : light}>
+        <Page className={`.bp3-ui-text ${isDark ? 'bp3-dark' : ''}`}>
+          <Game isDark={isDark ?? false} toggleTheme={toggleTheme} />
+        </Page>
+      </CurrentTheme.Provider>
+    </HotkeysProvider>
   );
 }
 

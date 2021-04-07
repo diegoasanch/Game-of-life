@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import Sidebar from '../../components/Sidebar'
 import CellGrid from '../../components/CellGrid'
@@ -9,6 +9,9 @@ import { useInterval } from 'react-use';
 import { CurrentTheme } from '../../context/theme'
 import { IthemeProp } from '../../types/styles'
 import { nextCycle, deep_copy, createBoard } from './gameFunctions'
+import { ContextMenu2 } from "@blueprintjs/popover2";
+import BoardMenu from '../../components/BoardMenu'
+import { useHotkeys } from "@blueprintjs/core";
 
 const PageContainer = styled.div<IthemeProp>`
     width: 100%;
@@ -23,10 +26,15 @@ const SideContainer = styled.div`
     z-index: 1;
 `
 const MainContainer = styled.div`
-    width: calc(100% - 270px);
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
+`
+const ResizedContextMenu = styled(ContextMenu2)`
+    height: 100vh;
+    width: 100vw;
 `
 
 interface Iprops {
@@ -42,6 +50,8 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
     const [speed, setSpeed] = useState(10)
     const [isPlaying, setIsPlaying] = useState(false)
     const [iterationCount, setIterationCount] = useState(0)
+    const [highlightNew, setHighlightNew] = useState(false)
+
     const theme = useContext(CurrentTheme)
 
     const handleColInput: numInputCallback = (valueAsNumber, valueAsString, innputElement) => {
@@ -83,6 +93,10 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
     const togglePlaying = () => {
         setIsPlaying(old => !old)
     }
+    const toggleHighlightNew = () => {
+        setHighlightNew(old => !old)
+    }
+
 
     useEffect(() => {
         initializeBoard(rowCount, colCount)
@@ -90,40 +104,104 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
 
     useEffect(() => {
         initializeBoard(rowCount, colCount, false, true)
+    // eslint-disable-next-line
     }, [])
 
     useInterval(() => {
         iterateOnce()
     }, isPlaying ? (1000 / speed) : null)
 
-    return (
-        <ToggleCellState.Provider value={toggleState} >
+    const hotkeys = useMemo(() => [
+        {
+            combo: 'p',
+            global: true,
+            label: "Play",
+            onKeyDown: togglePlaying
+        },
+        {
+            combo: 'right',
+            global: true,
+            label: "Iterate once",
+            onKeyDown: iterateOnce
+        },
+        {
+            combo: 'shift + n',
+            global: true,
+            label: "Randomize cells",
+            onKeyDown: () => resetBoard(true, false)
+        },
+        {
+            combo: 'shift + c',
+            global: true,
+            label: "Clear board",
+            onKeyDown: () => resetBoard(false, false)
+        },
+        {
+            combo: 'shift + r',
+            global: true,
+            label: "Reset Board",
+            onKeyDown: () => resetBoard(false, true)
+        },
+        {
+            combo: 'shift + l',
+            global: true,
+            label: "Toggle theme",
+            onKeyDown: toggleTheme
+        },
+        {
+            combo: 'shift + h',
+            global: true,
+            label: "Toggle theme",
+            onKeyDown: toggleHighlightNew
+        },
+    // eslint-disable-next-line
+    ], [content, isDark])
 
-            <PageContainer theme={theme}>
-                <SideContainer>
-                    <Sidebar
-                        rows={rowCount}
-                        cols={colCount}
-                        setRows={handleRowInput}
-                        setCols={handleColInput}
+    const { handleKeyDown, handleKeyUp } = useHotkeys(hotkeys)
+
+    return (
+        <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
+            <ToggleCellState.Provider value={toggleState} >
+                <ResizedContextMenu content={
+                    <BoardMenu
                         iterateOnce={iterateOnce}
-                        speed={speed}
-                        setSpeed={handleSpeed}
                         isPlaying={isPlaying}
                         togglePlaying={togglePlaying}
                         resetBoard={resetBoard}
-                        iterationCount={iterationCount}
-                        isDark={isDark}
-                        toggleTheme={toggleTheme}
-                    />
-                </SideContainer>
-                <MainContainer>
-                    <CellGrid
-                        rows={content}
-                    />
-                </MainContainer>
-            </PageContainer>
-        </ToggleCellState.Provider>
+                        />
+                    }
+                >
+                    <PageContainer theme={theme}>
+                        <SideContainer>
+                            <Sidebar
+                                rows={rowCount}
+                                cols={colCount}
+                                setRows={handleRowInput}
+                                setCols={handleColInput}
+                                iterateOnce={iterateOnce}
+                                speed={speed}
+                                setSpeed={handleSpeed}
+                                isPlaying={isPlaying}
+                                togglePlaying={togglePlaying}
+                                resetBoard={resetBoard}
+                                iterationCount={iterationCount}
+                                isDark={isDark}
+                                toggleTheme={toggleTheme}
+                                highlightNew={highlightNew}
+                                toggleHighlightNew={toggleHighlightNew}
+                            />
+                        </SideContainer>
+
+                            <MainContainer>
+                                <CellGrid
+                                    rows={content}
+                                    highlightNew={highlightNew}
+                                />
+                        </MainContainer>
+                    </PageContainer>
+                </ResizedContextMenu>
+            </ToggleCellState.Provider>
+        </div>
     )
 }
 

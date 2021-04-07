@@ -19,6 +19,7 @@ const SizeInput = ({ value, maxValue, placeholder, handleInput }: Iprops) => {
             onValueChange={handleInput}
             placeholder={placeholder}
             value={value}
+            fill
         />
     )
 }

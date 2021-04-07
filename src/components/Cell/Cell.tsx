@@ -3,20 +3,23 @@ import styled from 'styled-components'
 import { cellContent } from '../../types/cells'
 import { ToggleCellState } from '../../context/game'
 import { CurrentTheme } from '../../context/theme'
-import { IthemeProp } from '../../types/styles'
+import { IthemeProp, ICellType } from '../../types/styles'
 
-const StyledCell = styled.div<cellContent & IthemeProp>`
+const StyledCell = styled.div<cellContent & IthemeProp & ICellType>`
     height: 20px;
     width: 20px;
-    background-color: ${props => props.alive ? props.theme.cellAlive : props.theme.cellDead};
+    background-color: ${props => (
+        props.alive ? ((props.age !== 1 || !props.highlightNew) ? props.theme.cellAlive : props.theme.header) : props.theme.cellDead
+    )};
     border: solid 1px ${props => props.theme.cellBorder};
 `
 
 type Iprops = {
-    cellData: cellContent
+    cellData: cellContent,
+    highlightNew: boolean,
 }
 
-const Cell = ({ cellData }: Iprops ) => {
+const Cell = ({ cellData, highlightNew }: Iprops ) => {
     const toggleCell = useContext(ToggleCellState)
     const theme = useContext(CurrentTheme)
 
@@ -29,6 +32,7 @@ const Cell = ({ cellData }: Iprops ) => {
             {...cellData}
             onClick={handleClick}
             theme={theme}
+            highlightNew={highlightNew}
         />
     )
 }

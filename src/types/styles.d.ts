@@ -13,3 +13,6 @@ export type Itheme = {
 export type IthemeProp = {
     readonly theme: Itheme,
 }
+export type ICellType = {
+    readonly highlightNew: boolean,
+}

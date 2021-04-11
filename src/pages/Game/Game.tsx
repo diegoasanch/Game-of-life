@@ -56,13 +56,13 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
     const [colCount, setColCount] = useState(40)
     const [rowCount, setRowCount] = useState(30)
     const [content, setContent] = useState<boardData>()
+    const [resetCheckpoint, setResetCheckpoint] = useState<boardData>()
 
     const [speed, setSpeed] = useState(10)
     const [isPlaying, setIsPlaying] = useState(false)
     const [iterationCount, setIterationCount] = useState(0)
     const [highlightNew, setHighlightNew] = useLocalStorage('highlightNew', false)
     const history = useHistory()
-
     const [name, setName] = useState('')
 
     const handleColInput: numInputCallback = (valueAsNumber, valueAsString, innputElement) => {
@@ -97,8 +97,15 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
         setIterationCount(0)
     }
 
-    const resetBoard = (random=false, heart=false) => {
-        initializeBoard(rowCount, colCount, random, heart)
+    const resetBoard = () => {
+        setContent(resetCheckpoint)
+        setIterationCount(0)
+    }
+    const randomizeBoard = () => {
+        initializeBoard(rowCount, colCount, true, false)
+    }
+    const clearBoard = () => {
+        initializeBoard(rowCount, colCount, false, false)
     }
 
     const togglePlaying = () => {
@@ -135,12 +142,19 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
     }, [rowCount, colCount])
 
     useEffect(() => {
+        let checkpoint: boardData | undefined;
+
         if (fromStorage) {
             setContent(loadedBoard?.board_content)
             setName(loadedBoard?.name ?? 'untitled_board')
+            checkpoint = loadedBoard?.board_content
         }
-        else
+        else {
             initializeBoard(rowCount, colCount, false, true)
+            checkpoint = createBoard(rowCount, colCount, false, true)
+        }
+        setResetCheckpoint(checkpoint)
+
     // eslint-disable-next-line
     }, [fromStorage, loadedBoard?.board_content])
 
@@ -165,19 +179,19 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
             combo: 'shift + n',
             global: true,
             label: "Randomize cells",
-            onKeyDown: () => resetBoard(true, false)
+            onKeyDown: randomizeBoard
         },
         {
             combo: 'shift + c',
             global: true,
             label: "Clear board",
-            onKeyDown: () => resetBoard(false, false)
+            onKeyDown: clearBoard
         },
         {
             combo: 'shift + r',
             global: true,
             label: "Reset Board",
-            onKeyDown: () => resetBoard(false, true)
+            onKeyDown: resetBoard
         },
         {
             combo: 'shift + l',
@@ -217,6 +231,8 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
                         isPlaying={isPlaying}
                         togglePlaying={togglePlaying}
                         resetBoard={resetBoard}
+                        randomizeBoard={randomizeBoard}
+                        clearBoard={clearBoard}
                         name={name}
                         setName={setName}
                         saveBoard={handleSave}
@@ -237,6 +253,8 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
                                 isPlaying={isPlaying}
                                 togglePlaying={togglePlaying}
                                 resetBoard={resetBoard}
+                                randomizeBoard={randomizeBoard}
+                                clearBoard={clearBoard}
                                 iterationCount={iterationCount}
                                 isDark={isDark}
                                 toggleTheme={toggleTheme}

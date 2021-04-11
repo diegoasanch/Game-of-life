@@ -16,7 +16,9 @@ interface Iprops {
     iterateOnce: () => void,
     isPlaying: boolean,
     togglePlaying: () => void,
-    resetBoard: (random: boolean | undefined, heart: boolean | undefined) => void,
+    resetBoard: () => void,
+    randomizeBoard: () => void,
+    clearBoard: () => void,
     name: string,
     setName: (name: string) => void,
     saveBoard: () => void,
@@ -28,6 +30,8 @@ const BoardMenu = ({
     isPlaying,
     togglePlaying,
     resetBoard,
+    randomizeBoard,
+    clearBoard,
     name,
     setName,
     saveBoard,
@@ -106,7 +110,7 @@ const BoardMenu = ({
             <MenuItem
                 text="Randomize cells"
                 icon="random"
-                onClick={() => resetBoard(true, false)}
+                onClick={randomizeBoard}
                 labelElement={
                     <span className="bp3-text-muted">
                         <Icon icon="key-shift" />N
@@ -116,7 +120,7 @@ const BoardMenu = ({
             <MenuItem
                 text="Clear"
                 icon="eraser"
-                onClick={() => resetBoard(false, false)}
+                onClick={clearBoard}
                 labelElement={
                     <span className="bp3-text-muted">
                         <Icon icon="key-shift" />C
@@ -126,7 +130,7 @@ const BoardMenu = ({
             <MenuItem
                 text="Reset"
                 icon="reset"
-                onClick={() => resetBoard(false, true)}
+                onClick={resetBoard}
                 intent="danger"
                 labelElement={
                     <span className="bp3-text-muted">

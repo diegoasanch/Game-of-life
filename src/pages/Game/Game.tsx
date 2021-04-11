@@ -3,15 +3,15 @@ import styled from 'styled-components'
 import Sidebar from '../../components/Sidebar'
 import CellGrid from '../../components/CellGrid'
 import { numInputCallback, SetNumValue } from '../../types/inputs'
-import { boardData, IBoard, ISavedBoard } from '../../types/cells'
+import { boardData, ISavedBoard } from '../../types/cells'
 import { ToggleCellState } from '../../context/game'
-import { useInterval } from 'react-use';
+import { useInterval, useLocalStorage } from 'react-use';
 import { CurrentTheme, ThemeContext } from '../../context/theme'
 import { IthemeProp } from '../../types/styles'
 import { nextCycle, deep_copy, createBoard, saveBoard, saved_label, getGameLink } from './gameFunctions'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
-import { IIntentProps, Intent, Position, Toaster, useHotkeys } from "@blueprintjs/core";
+import { Intent, useHotkeys } from "@blueprintjs/core";
 import { Board } from '../../components/Models/game'
 import { useHistory } from 'react-router-dom'
 import { AppToaster } from '../../utils/toaster'
@@ -58,7 +58,7 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
     const [speed, setSpeed] = useState(10)
     const [isPlaying, setIsPlaying] = useState(false)
     const [iterationCount, setIterationCount] = useState(0)
-    const [highlightNew, setHighlightNew] = useState(false)
+    const [highlightNew, setHighlightNew] = useLocalStorage('highlightNew', false)
     const history = useHistory()
 
     const [name, setName] = useState('')
@@ -238,7 +238,7 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
                                 iterationCount={iterationCount}
                                 isDark={isDark}
                                 toggleTheme={toggleTheme}
-                                highlightNew={highlightNew}
+                                highlightNew={!!highlightNew}
                                 toggleHighlightNew={toggleHighlightNew}
                             />
                         </SideContainer>
@@ -246,7 +246,7 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
                             <MainContainer>
                                 <CellGrid
                                     rows={content}
-                                    highlightNew={highlightNew}
+                                    highlightNew={!!highlightNew}
                                 />
                         </MainContainer>
                     </PageContainer>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, MenuItem, MenuDivider, Icon, InputGroup, H3, H4, FormGroup, Button } from "@blueprintjs/core";
+import { Menu, MenuItem, MenuDivider, Icon, InputGroup, FormGroup, Button } from "@blueprintjs/core";
 import styled from 'styled-components';
 
 const StyledForm = styled(FormGroup)`

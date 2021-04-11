@@ -3,15 +3,20 @@ import styled from 'styled-components'
 import Sidebar from '../../components/Sidebar'
 import CellGrid from '../../components/CellGrid'
 import { numInputCallback, SetNumValue } from '../../types/inputs'
-import { boardData } from '../../types/cells'
+import { boardData, ISavedBoard } from '../../types/cells'
 import { ToggleCellState } from '../../context/game'
-import { useInterval } from 'react-use';
-import { CurrentTheme } from '../../context/theme'
+import { useInterval, useLocalStorage } from 'react-use';
+import { CurrentTheme, ThemeContext } from '../../context/theme'
 import { IthemeProp } from '../../types/styles'
-import { nextCycle, deep_copy, createBoard } from './gameFunctions'
+import { nextCycle, deep_copy, createBoard, saveBoard, saved_label } from './gameFunctions'
+// import { getGameLink } from './gameFunctions'
+import { getGameLink } from '../../utils/url'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
 import { useHotkeys } from "@blueprintjs/core";
+import { Board } from '../../components/Models/game'
+import { useHistory } from 'react-router-dom'
+import { showToast } from '../../utils/toaster'
 
 const PageContainer = styled.div<IthemeProp>`
     width: 100%;
@@ -37,22 +42,30 @@ const ResizedContextMenu = styled(ContextMenu2)`
     width: 100vw;
 `
 
-interface Iprops {
-    readonly isDark: boolean,
-    toggleTheme: () => void,
+
+type IProps = {
+    fromStorage: boolean,
+    loadedBoard?: ISavedBoard,
+    isLoading?: boolean,
 }
 
-const Game = ({ isDark, toggleTheme }: Iprops) => {
+
+const Game = ({ fromStorage, loadedBoard, isLoading }: IProps) => {
+
+    const theme = useContext(CurrentTheme)
+    const { isDark, toggleTheme } = useContext(ThemeContext)
 
     const [colCount, setColCount] = useState(40)
     const [rowCount, setRowCount] = useState(30)
     const [content, setContent] = useState<boardData>()
+    const [resetCheckpoint, setResetCheckpoint] = useState<boardData>()
+
     const [speed, setSpeed] = useState(10)
     const [isPlaying, setIsPlaying] = useState(false)
     const [iterationCount, setIterationCount] = useState(0)
-    const [highlightNew, setHighlightNew] = useState(false)
-
-    const theme = useContext(CurrentTheme)
+    const [highlightNew, setHighlightNew] = useLocalStorage('highlightNew', false)
+    const history = useHistory()
+    const [name, setName] = useState('')
 
     const handleColInput: numInputCallback = (valueAsNumber, valueAsString, innputElement) => {
         setColCount(valueAsNumber)
@@ -86,26 +99,65 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
         setIterationCount(0)
     }
 
-    const resetBoard = (random=false, heart=false) => {
-        initializeBoard(rowCount, colCount, random, heart)
+    const resetBoard = () => {
+        setContent(resetCheckpoint)
+        setIterationCount(0)
+        showToast('Reset board', 'primary')
+    }
+    const randomizeBoard = () => {
+        initializeBoard(rowCount, colCount, true, false)
+        showToast('Randomized cells', 'primary')
+    }
+    const clearBoard = () => {
+        initializeBoard(rowCount, colCount, false, false)
+        showToast('Cleared board', 'primary')
     }
 
     const togglePlaying = () => {
         setIsPlaying(old => !old)
     }
     const toggleHighlightNew = () => {
-        setHighlightNew(old => !old)
+        setHighlightNew(!highlightNew)
     }
 
+    const handleSave = () => {
+        if (name.length) {
+            console.log(`Saving... ${name}`)
+            saveBoard(new Board(null, content, name))
+            history.push("/" + saved_label(name))
+            showToast(`Saved board: ${name}`, 'success')
+        }
+        else {
+            alert("Invalid name")
+        }
+    }
+
+    const getShareableLink = () => {
+        const link = getGameLink(new Board(null, content, name))
+        navigator.clipboard.writeText(link)
+        showToast('Link copied to clipboard.', 'primary')
+    }
 
     useEffect(() => {
         initializeBoard(rowCount, colCount)
     }, [rowCount, colCount])
 
     useEffect(() => {
-        initializeBoard(rowCount, colCount, false, true)
+        let checkpoint: boardData | undefined;
+
+        if (fromStorage) {
+            setContent(loadedBoard?.board_content)
+            setName(loadedBoard?.name ?? 'untitled_board')
+            checkpoint = loadedBoard?.board_content
+        }
+        else {
+            initializeBoard(rowCount, colCount, false, true)
+            checkpoint = createBoard(rowCount, colCount, false, true)
+        }
+        setResetCheckpoint(checkpoint)
+
     // eslint-disable-next-line
-    }, [])
+    }, [fromStorage, loadedBoard?.board_content])
 
     useInterval(() => {
         iterateOnce()
@@ -128,19 +180,19 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
             combo: 'shift + n',
             global: true,
             label: "Randomize cells",
-            onKeyDown: () => resetBoard(true, false)
+            onKeyDown: randomizeBoard
         },
         {
             combo: 'shift + c',
             global: true,
             label: "Clear board",
-            onKeyDown: () => resetBoard(false, false)
+            onKeyDown: clearBoard
         },
         {
             combo: 'shift + r',
             global: true,
             label: "Reset Board",
-            onKeyDown: () => resetBoard(false, true)
+            onKeyDown: resetBoard
         },
         {
             combo: 'shift + l',
@@ -154,8 +206,20 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
             label: "Toggle theme",
             onKeyDown: toggleHighlightNew
         },
+        {
+            combo: 'shift + s',
+            global: true,
+            label: "Save board",
+            onKeyDown: handleSave
+        },
+        {
+            combo: 'shift + d',
+            global: true,
+            label: "Share board",
+            onKeyDown: getShareableLink
+        },
     // eslint-disable-next-line
-    ], [content, isDark])
+    ], [content, isDark, highlightNew])
 
     const { handleKeyDown, handleKeyUp } = useHotkeys(hotkeys)
 
@@ -168,9 +232,15 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
                         isPlaying={isPlaying}
                         togglePlaying={togglePlaying}
                         resetBoard={resetBoard}
-                        />
-                    }
-                >
+                        randomizeBoard={randomizeBoard}
+                        clearBoard={clearBoard}
+                        name={name}
+                        setName={setName}
+                        saveBoard={handleSave}
+                        share={getShareableLink}
+
+                    />
+                }>
                     <PageContainer theme={theme}>
                         <SideContainer>
                             <Sidebar
@@ -184,10 +254,12 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
                                 isPlaying={isPlaying}
                                 togglePlaying={togglePlaying}
                                 resetBoard={resetBoard}
+                                randomizeBoard={randomizeBoard}
+                                clearBoard={clearBoard}
                                 iterationCount={iterationCount}
                                 isDark={isDark}
                                 toggleTheme={toggleTheme}
-                                highlightNew={highlightNew}
+                                highlightNew={!!highlightNew}
                                 toggleHighlightNew={toggleHighlightNew}
                             />
                         </SideContainer>
@@ -195,7 +267,8 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
                             <MainContainer>
                                 <CellGrid
                                     rows={content}
-                                    highlightNew={highlightNew}
+                                    highlightNew={!!highlightNew}
+                                    isLoading={!!isLoading}
                                 />
                         </MainContainer>
                     </PageContainer>

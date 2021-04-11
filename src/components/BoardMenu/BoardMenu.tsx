@@ -1,11 +1,28 @@
 import React from 'react'
-import { Menu, MenuItem, MenuDivider, Icon } from "@blueprintjs/core";
+import { Menu, MenuItem, MenuDivider, Icon, InputGroup, FormGroup, Button } from "@blueprintjs/core";
+import styled from 'styled-components';
+
+const StyledForm = styled(FormGroup)`
+    padding: 0 0 5px 5px;
+    width: calc(100% - 10px);
+    margin: 0;
+
+    .save-btn {
+        margin-top: 5px;
+    }
+`
 
 interface Iprops {
     iterateOnce: () => void,
     isPlaying: boolean,
     togglePlaying: () => void,
-    resetBoard: (random: boolean | undefined, heart: boolean | undefined) => void,
+    resetBoard: () => void,
+    randomizeBoard: () => void,
+    clearBoard: () => void,
+    name: string,
+    setName: (name: string) => void,
+    saveBoard: () => void,
+    share: () => void,
 }
 
 const BoardMenu = ({
@@ -13,7 +30,19 @@ const BoardMenu = ({
     isPlaying,
     togglePlaying,
     resetBoard,
+    randomizeBoard,
+    clearBoard,
+    name,
+    setName,
+    saveBoard,
+    share,
 }: Iprops) => {
+
+    const handleNameChange = (event: React.FormEvent<HTMLElement>) => {
+        // console.log({changed_name})
+        setName((event.target as HTMLInputElement).value)
+    }
+
     return (
         <Menu>
             <MenuItem
@@ -38,11 +67,50 @@ const BoardMenu = ({
                     </span>
                 }
             />
+
             <MenuDivider />
+            <StyledForm
+                label="Save board"
+                labelFor="name-input"
+                labelInfo={
+                    <>
+                        (<Icon icon="key-shift" />S)
+                    </>
+                }
+            >
+                <InputGroup
+                    onChange={handleNameChange}
+                    value={name}
+                    placeholder="untitled_board"
+                    id="name-input"
+                    autoFocus
+                />
+                <Button
+                    className="save-btn"
+                    text={"Save"}
+                    icon="floppy-disk"
+                    onClick={saveBoard}
+                    fill
+                />
+
+            </StyledForm>
+            <MenuItem
+                text="Share"
+                icon="share"
+                onClick={share}
+                labelElement={
+                    <span className="bp3-text-muted">
+                        <Icon icon="key-shift" />D
+                    </span>
+                }
+            />
+
+            <MenuDivider />
+
             <MenuItem
                 text="Randomize cells"
                 icon="random"
-                onClick={() => resetBoard(true, false)}
+                onClick={randomizeBoard}
                 labelElement={
                     <span className="bp3-text-muted">
                         <Icon icon="key-shift" />N
@@ -50,9 +118,9 @@ const BoardMenu = ({
                 }
             />
             <MenuItem
-                text="Clear board"
+                text="Clear"
                 icon="eraser"
-                onClick={() => resetBoard(false, false)}
+                onClick={clearBoard}
                 labelElement={
                     <span className="bp3-text-muted">
                         <Icon icon="key-shift" />C
@@ -60,9 +128,9 @@ const BoardMenu = ({
                 }
             />
             <MenuItem
-                text="Reset board"
+                text="Reset"
                 icon="reset"
-                onClick={() => resetBoard(false, true)}
+                onClick={resetBoard}
                 intent="danger"
                 labelElement={
                     <span className="bp3-text-muted">

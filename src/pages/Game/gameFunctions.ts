@@ -1,4 +1,4 @@
-import { boardData } from '../../types/cells'
+import { boardData, IBoard, ISavedBoard } from '../../types/cells'
 
 export const aliveNextCycle = (board: boardData, row: number, col: number): boolean => {
     const ROWS = board.length;
@@ -30,8 +30,8 @@ export const aliveNextCycle = (board: boardData, row: number, col: number): bool
 
 export const nextCycle = (board: boardData) : boardData => {
     const copied_data = deep_copy(board) // copy the board
-    let i;
-    let j;
+    let i
+    let j
 
     const rows = board.length;
     const cols = board[0].length;
@@ -60,43 +60,41 @@ export const deep_copy = (to_copy: any): any => {
 }
 
 
-const heartPattern: number[][] = [
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
-    [0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0],
-    [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-    [0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-    [0,0,0,0,1,0,0,0,0,1,0,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-    [0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0],
-    [1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0]
-]
+const heartPattern: string = `
+0000000000000000000000000100000000000000
+0000000000000000000000000000000100000000
+0000000000100000000000010000000100000000
+0001100011000000100000000000000100000110
+0000100001000000010000000000000000000010
+0000000000000000001000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000001000000
+0000000000000000000000000010000000000000
+0000000000000000000000000000000000000000
+0000000000000000011000110000000000000000
+0000000000000000111101111000000000000000
+0001100000000001111111111100000000000000
+0011000000000001111111111100000000000000
+0010000000000000111111111000000011000001
+0000000000000000011111110000000000000000
+0000100001000000001111100000000000000010
+0000100001001000000111000000000000000010
+0000100001011100000010000000000000000010
+0000000000110000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000000000000000000
+0000000000000000000000000010000000000000
+0000000000000000000000000111000000000000
+0000000000000000000000000010000100000000
+0000011100001110000000000000000010000000
+0000000000000010000000000000000001000000
+0000000000000000000000000000000000000000
+0000000000000000000000110000000011000000
+1000010000000000000000100000000001100000
+`
 
-
-
-export const createBoard = (rows: number, cols: number, random: boolean, heart=false): boardData  => {
-    const array = []
+export const generateBoard = (rows: number, cols: number, random?: boolean, pattern?: string): boardData => {
+    const generated = []
     let row;
     let is_alive
 
@@ -105,11 +103,10 @@ export const createBoard = (rows: number, cols: number, random: boolean, heart=f
         for (let j = 0; j < cols; j++) {
             if (random)
                 is_alive = !!(Math.round(Math.random()))
-            else if (heart)
-                is_alive = !!(heartPattern[i][j])
+            else if (pattern?.length)
+                is_alive = !!parseInt(pattern[(i * cols) + j])
             else
                 is_alive = false;
-
 
             row.push({
                 alive: is_alive,
@@ -118,7 +115,59 @@ export const createBoard = (rows: number, cols: number, random: boolean, heart=f
                 column: j
             })
         }
-        array.push(row)
+        generated.push(row)
     }
-    return array
+    return generated
+}
+
+export const createBoard = (rows: number, cols: number, random: boolean, heart=false): boardData  => {
+    const pattern = heartPattern.replaceAll('\n', '')
+    if (heart)
+        return generateBoard(rows, cols, random, pattern)
+    return generateBoard(rows, cols, random)
+}
+
+export const saved_label = (name: string): string => `saved/${name.replace(' ', '_')}`
+
+
+export const board_to_saved_format = (to_save: IBoard): ISavedBoard => (
+    {
+        name: to_save.name,
+        created: to_save.created,
+        edited: to_save.edited,
+        board_content: to_save.board_content,
+    }
+)
+
+export const saveBoard = (to_save: IBoard): void => {
+    const storage_key = saved_label(to_save.name)
+
+    if (window.localStorage.hasOwnProperty(storage_key)) {
+        to_save.edited = new Date();
+    }
+    const formated_board = board_to_saved_format(to_save)
+    const serialized_board = JSON.stringify(formated_board)
+
+    window.localStorage.setItem(storage_key, serialized_board)
+}
+
+export const getBoard = (name: string): Promise<ISavedBoard | undefined> => {
+
+    return new Promise((resolve, reject) => {
+        if (window.localStorage.hasOwnProperty(saved_label(name))) { // saved entry
+            const board_string = window.localStorage.getItem(saved_label(name)) ?? '{}'
+            const parsed_board = JSON.parse(board_string)
+            const default_content: boardData = [[]]
+
+            const loaded_board: ISavedBoard = {
+                name: parsed_board.name ?? 'undefined',
+                created: parsed_board.created ?? new Date(),
+                edited: parsed_board.edited ?? new Date(),
+                board_content: parsed_board.board_content ?? default_content,
+            }
+            return resolve(loaded_board)
+        }
+        return resolve(undefined)
+    })
+
 }

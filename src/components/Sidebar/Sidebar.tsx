@@ -133,7 +133,9 @@ interface Iprops {
     isPlaying: boolean,
     iterationCount: number,
     iterateOnce: () => void,
-    resetBoard: (random: boolean | undefined, heart: boolean | undefined) => void,
+    resetBoard: () => void,
+    randomizeBoard: () => void,
+    clearBoard: () => void,
     togglePlaying: () => void,
     readonly isDark: boolean,
     toggleTheme: () => void,
@@ -183,6 +185,8 @@ const Sidebar = ({
     isPlaying,
     togglePlaying,
     resetBoard,
+    randomizeBoard,
+    clearBoard,
     iterationCount,
     isDark,
     toggleTheme,
@@ -282,21 +286,21 @@ const Sidebar = ({
                 <ButtonGroup>
                     <Tooltip2 content="Reset board" position={Position.TOP}>
                         <Button
-                            onClick={() => resetBoard(false, true)}
+                            onClick={resetBoard}
                             icon="reset"
                             intent="danger"
                         />
                     </Tooltip2>
                     <Tooltip2 content="Clear board" position={Position.TOP}>
                         <Button
-                            onClick={() => resetBoard(false, false)}
+                            onClick={clearBoard}
                             icon="eraser"
                         />
                     </Tooltip2>
                     <Tooltip2 content="Randomize cells" position={Position.TOP}>
                         <Button
                             text="Random"
-                            onClick={() => resetBoard(true, false)}
+                            onClick={randomizeBoard}
                             icon="random"
                         />
                     </Tooltip2>
@@ -306,7 +310,6 @@ const Sidebar = ({
 
             <Stats theme={theme}>
                 <StyledDivider className="divider" />
-                {/* <SectionHeader>Info</SectionHeader> */}
 
                 <H4>Iteration count: <Count>{iterationCount}</Count></H4>
                 <Shoutout className="bp3-text-muted">

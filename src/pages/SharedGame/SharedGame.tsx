@@ -30,7 +30,7 @@ function SharedGame() {
 
         if (rows && cols && content) {
             generated_board = hex_to_board(rows, cols, content)
-            AppToaster.show({ message: `Loaded ${rows} x ${cols} board`, intent: "primary"})
+            AppToaster.show({ message: `Loaded shared ${rows} x ${cols} board`, intent: "primary"})
         }
         else {
             generated_board = default_saved_board

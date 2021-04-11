@@ -103,7 +103,7 @@ const generateBoard = (rows: number, cols: number, random?: boolean, pattern?: s
         for (let j = 0; j < cols; j++) {
             if (random)
                 is_alive = !!(Math.round(Math.random()))
-            if (pattern)
+            else if (pattern?.length)
                 is_alive = !!parseInt(pattern[(i * cols) + j])
             else
                 is_alive = false;

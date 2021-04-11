@@ -114,7 +114,7 @@ const BoardMenu = ({
                 }
             />
             <MenuItem
-                text="Clear board"
+                text="Clear"
                 icon="eraser"
                 onClick={() => resetBoard(false, false)}
                 labelElement={
@@ -124,7 +124,7 @@ const BoardMenu = ({
                 }
             />
             <MenuItem
-                text="Reset board"
+                text="Reset"
                 icon="reset"
                 onClick={() => resetBoard(false, true)}
                 intent="danger"

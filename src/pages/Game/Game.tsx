@@ -8,7 +8,9 @@ import { ToggleCellState } from '../../context/game'
 import { useInterval, useLocalStorage } from 'react-use';
 import { CurrentTheme, ThemeContext } from '../../context/theme'
 import { IthemeProp } from '../../types/styles'
-import { nextCycle, deep_copy, createBoard, saveBoard, saved_label, getGameLink } from './gameFunctions'
+import { nextCycle, deep_copy, createBoard, saveBoard, saved_label } from './gameFunctions'
+// import { getGameLink } from './gameFunctions'
+import { getGameLink } from '../../utils/url'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
 import { Intent, useHotkeys } from "@blueprintjs/core";

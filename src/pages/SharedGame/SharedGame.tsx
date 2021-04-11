@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { ISavedBoard } from '../../types/cells'
 import { AppToaster } from '../../utils/toaster'
 import Game from '../Game'
-import { hex_to_board } from '../Game/gameFunctions'
+import { base64ToBoard } from '../../utils/url'
 
 const default_saved_board: ISavedBoard = {
     name: 'undefined',
@@ -17,7 +17,8 @@ type IUrlParams = {
     content: string,
 }
 const notifyInvalid = () => {
-    AppToaster.show({ message: 'Invalid board', intent: 'warning' })
+    console.error("Invalid board")
+    AppToaster.show({ message: 'Invalid board', intent: 'danger' })
 }
 
 function SharedGame() {
@@ -29,12 +30,17 @@ function SharedGame() {
         let generated_board
 
         if (rows && cols && content) {
-            generated_board = hex_to_board(rows, cols, content)
-            AppToaster.show({ message: `Loaded shared ${rows} x ${cols} board`, intent: "primary"})
+            // generated_board = hex_to_board(rows, cols, content)
+            try {
+                generated_board = base64ToBoard(rows, cols, content)
+                AppToaster.show({ message: `Loaded shared ${rows} x ${cols} board`, intent: "primary"})
+            } catch (error) {
+                generated_board = default_saved_board
+                notifyInvalid()
+            }
         }
         else {
             generated_board = default_saved_board
-            console.error("Invalid board")
             notifyInvalid()
         }
         setSavedBoard(generated_board)
@@ -54,12 +60,10 @@ function SharedGame() {
             parsed_rows = side
             parsed_cols = side
         }
-
         console.log({ dimensions, parsed_rows, parsed_cols, content})
         createBoard(parsed_rows, parsed_cols, content)
 
     }, [dimensions, content])
-
 
     return (
         <Game fromStorage={true} loadedBoard={savedBoard} />

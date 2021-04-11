@@ -30,8 +30,8 @@ export const aliveNextCycle = (board: boardData, row: number, col: number): bool
 
 export const nextCycle = (board: boardData) : boardData => {
     const copied_data = deep_copy(board) // copy the board
-    let i;
-    let j;
+    let i
+    let j
 
     const rows = board.length;
     const cols = board[0].length;
@@ -93,7 +93,7 @@ const heartPattern: string = `
 1000010000000000000000100000000001100000
 `
 
-const generateBoard = (rows: number, cols: number, random?: boolean, pattern?: string): boardData => {
+export const generateBoard = (rows: number, cols: number, random?: boolean, pattern?: string): boardData => {
     const generated = []
     let row;
     let is_alive
@@ -121,18 +121,14 @@ const generateBoard = (rows: number, cols: number, random?: boolean, pattern?: s
 }
 
 export const createBoard = (rows: number, cols: number, random: boolean, heart=false): boardData  => {
-
     const pattern = heartPattern.replaceAll('\n', '')
-
     if (heart)
         return generateBoard(rows, cols, random, pattern)
     return generateBoard(rows, cols, random)
 }
 
-export const saved_label = (name: string): string => {
-    return `saved/${name.replace(' ', '_')}`
+export const saved_label = (name: string): string => `saved/${name.replace(' ', '_')}`
 
-}
 
 export const board_to_saved_format = (to_save: IBoard): ISavedBoard => (
     {
@@ -171,115 +167,4 @@ export const getBoard = (name: string): ISavedBoard | undefined => {
         return loaded_board
     }
     return undefined
-}
-
-/**
- * Shortens the input string, replaces long repeating strings of zeroes with
- * `x{LEN}` where `LEN` is the amount of repetitions
- * @param hex
- */
-const shorten_hex = (hex: string): string => {
-    let new_hex = ''
-    let current = ''
-    let next = ''
-    let repeating = false
-
-    for (let char = 0; char < hex.length; char++) {
-        current = hex[char]
-        next = (char < hex.length - 1) ? hex[char + 1] : ''
-
-        if ([current, next].every(a => a === '0')) {
-            let count = 0
-            repeating = true
-
-            while (repeating && char < hex.length) {
-                count++
-                repeating = hex[++char] === current
-            }
-            new_hex += `x${count};`
-            char--
-        }
-        else {
-            new_hex += current
-        }
-    }
-    return new_hex
-}
-
-const board_to_hex = (content: boardData): string => {
-    let bin = ''
-    let hex = ''
-
-    // Board to binary
-    for (let row of content) {
-        for (let col of row) {
-            bin += col.alive ? '1' : '0'
-        }
-    }
-    let byte;
-    // Binary to hex, separating in bytes
-    for (let i = 0; i < bin.length; i += 8) {
-
-        byte = bin.substring(i, i+8)
-        hex += parseInt(byte, 2).toString(16).padStart(2, '0')
-    }
-
-    console.log(`Binary: ${bin}\n\nHex: ${hex}`)
-
-    return hex
-}
-
-export const getGameLink = (board: IBoard): string => {
-    const cols = board.getCols()
-    const rows = board.getRows()
-    const content = board_to_hex(board.board_content)
-
-
-    // return window.location.host + `/shared/${rows}x${cols}/${content}`
-    const { host, pathname } = window.location
-    return host + pathname + `#/shared/${rows}x${cols}/${shorten_hex(content)}`
-}
-
-const unzip_hex = (hex: string): string => {
-    let out = ''
-    for (let i = 0; i < hex.length; i++) {
-        if (hex[i] !== 'x')
-            out += hex[i]
-        else {
-            const separator = hex.indexOf(';', i);
-            const repetitions = parseInt(hex.substring(i+1, separator))
-            // console.log({separator, repetitions, i})
-            i = separator
-
-            out += '0'.repeat(repetitions)
-        }
-    }
-    return out
-}
-const hex_to_bin = (hex: string): string => {
-    let out = ''
-
-    for (let i = 0; i < hex.length; i += 2) {
-        let byte = hex.substring(i, i+2)
-        out += parseInt(byte, 16).toString(2).padStart(8, '0')
-    }
-
-    return out
-}
-
-export const hex_to_board = (rows: number, cols: number, zipped_hex: string): ISavedBoard => {
-    const hex = unzip_hex(zipped_hex)
-    const bin = hex_to_bin(hex)
-
-    console.log(`Zipped: ${zipped_hex} \n\n\n Hex: ${hex}\n\n\nBinary: ${bin}`)
-
-    const content = generateBoard(rows, cols, false, bin)
-    const board: ISavedBoard = {
-        name: 'Shared board',
-        created: new Date(),
-        edited: new Date(),
-        board_content: content,
-    }
-
-    return board
 }

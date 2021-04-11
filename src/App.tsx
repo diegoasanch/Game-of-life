@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { FocusStyleManager, HotkeysProvider } from "@blueprintjs/core"
 import { useLocalStorage } from 'react-use'
 import  {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
   Route,
 } from 'react-router-dom'
@@ -38,7 +38,7 @@ function App() {
         }>
           <Page className={`.bp3-ui-text ${isDark ? 'bp3-dark' : ''}`}>
 
-            <Router>
+            <Router basename="/">
               <Switch>
 
                 <Route exact path="/saved/:name">
@@ -49,7 +49,7 @@ function App() {
                   <SharedGame />
                 </Route>
 
-                <Route path="/">
+                <Route path="/" exact>
                   <Game fromStorage={false} />
                 </Route>
 

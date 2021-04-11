@@ -236,7 +236,8 @@ export const getGameLink = (board: IBoard): string => {
 
 
     // return window.location.host + `/shared/${rows}x${cols}/${content}`
-    return window.location.host + `/shared/${rows}x${cols}/${shorten_hex(content)}`
+    const { host, pathname } = window.location
+    return host + pathname + `#/shared/${rows}x${cols}/${shorten_hex(content)}`
 }
 
 const unzip_hex = (hex: string): string => {

@@ -55,7 +55,7 @@ const CellGrid = ({ rows, highlightNew }: Iprops) => {
                     )
                 ))
                 :
-                <H1>Not enough cells for me to show 😢</H1>
+                <H1>Not enough cells to display 😢</H1>
             }
         </Container>
     )

@@ -3,15 +3,18 @@ import styled from 'styled-components'
 import Sidebar from '../../components/Sidebar'
 import CellGrid from '../../components/CellGrid'
 import { numInputCallback, SetNumValue } from '../../types/inputs'
-import { boardData } from '../../types/cells'
+import { boardData, IBoard, ISavedBoard } from '../../types/cells'
 import { ToggleCellState } from '../../context/game'
 import { useInterval } from 'react-use';
-import { CurrentTheme } from '../../context/theme'
+import { CurrentTheme, ThemeContext } from '../../context/theme'
 import { IthemeProp } from '../../types/styles'
-import { nextCycle, deep_copy, createBoard } from './gameFunctions'
+import { nextCycle, deep_copy, createBoard, saveBoard, saved_label, getGameLink } from './gameFunctions'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
-import { useHotkeys } from "@blueprintjs/core";
+import { IIntentProps, Intent, Position, Toaster, useHotkeys } from "@blueprintjs/core";
+import { Board } from '../../components/Models/game'
+import { useHistory } from 'react-router-dom'
+import { AppToaster } from '../../utils/toaster'
 
 const PageContainer = styled.div<IthemeProp>`
     width: 100%;
@@ -37,22 +40,28 @@ const ResizedContextMenu = styled(ContextMenu2)`
     width: 100vw;
 `
 
-interface Iprops {
-    readonly isDark: boolean,
-    toggleTheme: () => void,
+
+type IProps = {
+    fromStorage: boolean,
+    loadedBoard?: ISavedBoard,
 }
 
-const Game = ({ isDark, toggleTheme }: Iprops) => {
+const Game = ({ fromStorage, loadedBoard }: IProps) => {
+
+    const theme = useContext(CurrentTheme)
+    const { isDark, toggleTheme } = useContext(ThemeContext)
 
     const [colCount, setColCount] = useState(40)
     const [rowCount, setRowCount] = useState(30)
     const [content, setContent] = useState<boardData>()
+
     const [speed, setSpeed] = useState(10)
     const [isPlaying, setIsPlaying] = useState(false)
     const [iterationCount, setIterationCount] = useState(0)
     const [highlightNew, setHighlightNew] = useState(false)
+    const history = useHistory()
 
-    const theme = useContext(CurrentTheme)
+    const [name, setName] = useState('')
 
     const handleColInput: numInputCallback = (valueAsNumber, valueAsString, innputElement) => {
         setColCount(valueAsNumber)
@@ -97,15 +106,41 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
         setHighlightNew(old => !old)
     }
 
+    const handleSave = () => {
+        if (name.length) {
+            console.log(`Saving... ${name}`)
+            saveBoard(new Board(null, content, name))
+            history.push("/" + saved_label(name))
+            showToast(`Saved board: ${name}`, 'success')
+        }
+        else {
+            alert("Invalid name")
+        }
+    }
+
+    const showToast = (message: string, intent?: Intent) => {
+        AppToaster.show({ message, intent })
+    }
+
+    const getShareableLink = () => {
+        const link = getGameLink(new Board(null, content, name))
+        navigator.clipboard.writeText(link)
+        showToast('Link copied to clipboard.', 'primary')
+    }
 
     useEffect(() => {
         initializeBoard(rowCount, colCount)
     }, [rowCount, colCount])
 
     useEffect(() => {
-        initializeBoard(rowCount, colCount, false, true)
+        if (fromStorage) {
+            setContent(loadedBoard?.board_content)
+            setName(loadedBoard?.name ?? 'untitled_board')
+        }
+        else
+            initializeBoard(rowCount, colCount, false, true)
     // eslint-disable-next-line
-    }, [])
+    }, [fromStorage, loadedBoard?.board_content])
 
     useInterval(() => {
         iterateOnce()
@@ -154,6 +189,18 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
             label: "Toggle theme",
             onKeyDown: toggleHighlightNew
         },
+        {
+            combo: 'shift + s',
+            global: true,
+            label: "Save board",
+            onKeyDown: handleSave
+        },
+        {
+            combo: 'shift + h',
+            global: true,
+            label: "Share board",
+            onKeyDown: getShareableLink
+        },
     // eslint-disable-next-line
     ], [content, isDark])
 
@@ -168,9 +215,13 @@ const Game = ({ isDark, toggleTheme }: Iprops) => {
                         isPlaying={isPlaying}
                         togglePlaying={togglePlaying}
                         resetBoard={resetBoard}
-                        />
-                    }
-                >
+                        name={name}
+                        setName={setName}
+                        saveBoard={handleSave}
+                        share={getShareableLink}
+
+                    />
+                }>
                     <PageContainer theme={theme}>
                         <SideContainer>
                             <Sidebar

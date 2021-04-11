@@ -6,3 +6,15 @@ export type cellContent = {
 }
 
 export type boardData = cellContent[][];
+
+export interface ISavedBoard {
+    name: string,
+    created: Date,
+    edited: Date,
+    board_content: boardData
+}
+
+export interface IBoard extends ISavedBoard {
+    getRows: () => number,
+    getCols: () => number,
+}

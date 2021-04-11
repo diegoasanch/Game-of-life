@@ -13,10 +13,10 @@ import { nextCycle, deep_copy, createBoard, saveBoard, saved_label } from './gam
 import { getGameLink } from '../../utils/url'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
-import { Intent, useHotkeys } from "@blueprintjs/core";
+import { useHotkeys } from "@blueprintjs/core";
 import { Board } from '../../components/Models/game'
 import { useHistory } from 'react-router-dom'
-import { AppToaster } from '../../utils/toaster'
+import { showToast } from '../../utils/toaster'
 
 const PageContainer = styled.div<IthemeProp>`
     width: 100%;
@@ -46,9 +46,11 @@ const ResizedContextMenu = styled(ContextMenu2)`
 type IProps = {
     fromStorage: boolean,
     loadedBoard?: ISavedBoard,
+    isLoading?: boolean,
 }
 
-const Game = ({ fromStorage, loadedBoard }: IProps) => {
+
+const Game = ({ fromStorage, loadedBoard, isLoading }: IProps) => {
 
     const theme = useContext(CurrentTheme)
     const { isDark, toggleTheme } = useContext(ThemeContext)
@@ -100,12 +102,15 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
     const resetBoard = () => {
         setContent(resetCheckpoint)
         setIterationCount(0)
+        showToast('Reset board', 'primary')
     }
     const randomizeBoard = () => {
         initializeBoard(rowCount, colCount, true, false)
+        showToast('Randomized cells', 'primary')
     }
     const clearBoard = () => {
         initializeBoard(rowCount, colCount, false, false)
+        showToast('Cleared board', 'primary')
     }
 
     const togglePlaying = () => {
@@ -125,10 +130,6 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
         else {
             alert("Invalid name")
         }
-    }
-
-    const showToast = (message: string, intent?: Intent) => {
-        AppToaster.show({ message, intent })
     }
 
     const getShareableLink = () => {
@@ -267,6 +268,7 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
                                 <CellGrid
                                     rows={content}
                                     highlightNew={!!highlightNew}
+                                    isLoading={!!isLoading}
                                 />
                         </MainContainer>
                     </PageContainer>

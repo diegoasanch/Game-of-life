@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { CurrentTheme } from '../../context/theme'
 import { cellContent } from '../../types/cells'
 import { IthemeProp } from '../../types/styles'
-import { H1 } from '@blueprintjs/core'
+import { H1, Spinner } from '@blueprintjs/core'
 import Cell from '../Cell'
 
 const Container = styled.div<IthemeProp>`
@@ -34,14 +34,23 @@ const Row = styled.div`
 interface Iprops {
     rows: cellContent[][] | undefined,
     highlightNew: boolean,
+    isLoading: boolean
 }
 
-const CellGrid = ({ rows, highlightNew }: Iprops) => {
+const CellGrid = ({ rows, highlightNew, isLoading }: Iprops) => {
     const theme = useContext(CurrentTheme)
 
     return (
         <Container theme={theme}>
-            { (rows?.length && rows[0].length) ?
+            { isLoading ?
+                <>
+                    <H1>Loading...</H1>
+                    <br />
+                    <Spinner size={80} intent="primary"/>
+                </>
+            :
+                (
+                (rows?.length && rows[0].length) ?
                     ( rows.map((row, index) => (
                         <Row key={`row_${index}`}>
                             { row.map( cell => (
@@ -56,6 +65,7 @@ const CellGrid = ({ rows, highlightNew }: Iprops) => {
                 ))
                 :
                 <H1>Not enough cells to display 😢</H1>
+            )
             }
         </Container>
     )

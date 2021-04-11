@@ -20,19 +20,34 @@ function SavedGame() {
 
     const { name } = useParams<IUrlParams>()
     const [savedBoard, setSavedBoard] = useState(default_saved_board)
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const from_localstorage = getBoard(name)
-        if (from_localstorage) {
-            setSavedBoard(from_localstorage)
-            AppToaster.show({ message: `Loaded board "${name}"`, intent: "primary"})
+        const fetchBoard = async () => {
+            try {
+                const from_localstorage = await getBoard(name)
+                if (from_localstorage) {
+                    setSavedBoard(from_localstorage)
+                    AppToaster.show({ message: `Loaded board "${name}"`, intent: "primary"})
+                }
+                else {
+                    setSavedBoard(default_saved_board)
+                    AppToaster.show({ message: `Couldn't load board "${name}"`, intent: "danger"})
+                }
+            } catch (error) {
+                AppToaster.show({ message: "Error loading the board.", intent: 'danger'})
+            } finally {
+                setIsLoading(false)
+            }
         }
-        else
-            AppToaster.show({ message: `Couldn't load board "${name}"`, intent: "danger"})
+
+        setIsLoading(true)
+        fetchBoard()
+
     }, [name])
 
     return (
-        <Game fromStorage={true} loadedBoard={savedBoard} />
+        <Game fromStorage={true} loadedBoard={savedBoard} isLoading={isLoading} />
     )
 }
 

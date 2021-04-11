@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { ISavedBoard } from '../../types/cells'
-import { AppToaster } from '../../utils/toaster'
+import { showToast } from '../../utils/toaster'
 import Game from '../Game'
 import { base64ToBoard } from '../../utils/url'
 
@@ -16,34 +16,35 @@ type IUrlParams = {
     dimensions: string,
     content: string,
 }
+
+
 const notifyInvalid = () => {
     console.error("Invalid board")
-    AppToaster.show({ message: 'Invalid board', intent: 'danger' })
+    showToast('Invalid board', 'danger')
 }
 
 function SharedGame() {
 
     const { dimensions, content } = useParams<IUrlParams>()
     const [savedBoard, setSavedBoard] = useState(default_saved_board)
+    const [isLoading, setIsLoading] = useState(true)
 
-    const createBoard = (rows: number, cols: number, content: string) => {
-        let generated_board
+    const createBoard = (rows: number, cols: number, content: string): Promise<void> => {
+        return new Promise((resolve, reject) => {
+            let generated_board
 
-        if (rows && cols && content) {
-            // generated_board = hex_to_board(rows, cols, content)
             try {
-                generated_board = base64ToBoard(rows, cols, content)
-                AppToaster.show({ message: `Loaded shared ${rows} x ${cols} board`, intent: "primary"})
+                if (rows && cols && content) {
+                    generated_board = base64ToBoard(rows, cols, content)
+                    showToast(`Loaded shared ${rows} x ${cols} board`, "primary")
+                    setSavedBoard(generated_board)
+                    return resolve()
+                }
+                throw new Error('invalid board')
             } catch (error) {
-                generated_board = default_saved_board
-                notifyInvalid()
+                return reject()
             }
-        }
-        else {
-            generated_board = default_saved_board
-            notifyInvalid()
-        }
-        setSavedBoard(generated_board)
+        })
     }
 
     useEffect(() => {
@@ -61,12 +62,24 @@ function SharedGame() {
             parsed_cols = side
         }
         console.log({ dimensions, parsed_rows, parsed_cols, content})
-        createBoard(parsed_rows, parsed_cols, content)
+
+        const call_create = async () => {
+            setIsLoading(true)
+            try {
+                await createBoard(parsed_rows, parsed_cols, content)
+            } catch (error) {
+                setSavedBoard(default_saved_board)
+                notifyInvalid()
+            } finally {
+                setIsLoading(false)
+            }
+        }
+        call_create()
 
     }, [dimensions, content])
 
     return (
-        <Game fromStorage={true} loadedBoard={savedBoard} />
+        <Game fromStorage={true} loadedBoard={savedBoard} isLoading={isLoading} />
     )
 }
 

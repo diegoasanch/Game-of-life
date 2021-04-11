@@ -151,20 +151,23 @@ export const saveBoard = (to_save: IBoard): void => {
     window.localStorage.setItem(storage_key, serialized_board)
 }
 
-export const getBoard = (name: string): ISavedBoard | undefined => {
+export const getBoard = (name: string): Promise<ISavedBoard | undefined> => {
 
-    if (window.localStorage.hasOwnProperty(saved_label(name))) { // saved entry
-        const board_string = window.localStorage.getItem(saved_label(name)) ?? '{}'
-        const parsed_board = JSON.parse(board_string)
-        const default_content: boardData = [[]]
+    return new Promise((resolve, reject) => {
+        if (window.localStorage.hasOwnProperty(saved_label(name))) { // saved entry
+            const board_string = window.localStorage.getItem(saved_label(name)) ?? '{}'
+            const parsed_board = JSON.parse(board_string)
+            const default_content: boardData = [[]]
 
-        const loaded_board: ISavedBoard = {
-            name: parsed_board.name ?? 'undefined',
-            created: parsed_board.created ?? new Date(),
-            edited: parsed_board.edited ?? new Date(),
-            board_content: parsed_board.board_content ?? default_content,
+            const loaded_board: ISavedBoard = {
+                name: parsed_board.name ?? 'undefined',
+                created: parsed_board.created ?? new Date(),
+                edited: parsed_board.edited ?? new Date(),
+                board_content: parsed_board.board_content ?? default_content,
+            }
+            return resolve(loaded_board)
         }
-        return loaded_board
-    }
-    return undefined
+        return resolve(undefined)
+    })
+
 }

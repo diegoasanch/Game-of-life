@@ -24,7 +24,7 @@ function App() {
   const [isDark, setIsDark] = useLocalStorage('isDark', true)
 
   const toggleTheme = () => {
-    setIsDark(prev => !prev)
+    setIsDark(!isDark)
   }
 
   return (

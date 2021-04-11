@@ -103,7 +103,7 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
         setIsPlaying(old => !old)
     }
     const toggleHighlightNew = () => {
-        setHighlightNew(old => !old)
+        setHighlightNew(!highlightNew)
     }
 
     const handleSave = () => {
@@ -196,13 +196,13 @@ const Game = ({ fromStorage, loadedBoard }: IProps) => {
             onKeyDown: handleSave
         },
         {
-            combo: 'shift + h',
+            combo: 'shift + d',
             global: true,
             label: "Share board",
             onKeyDown: getShareableLink
         },
     // eslint-disable-next-line
-    ], [content, isDark])
+    ], [content, isDark, highlightNew])
 
     const { handleKeyDown, handleKeyUp } = useHotkeys(hotkeys)
 

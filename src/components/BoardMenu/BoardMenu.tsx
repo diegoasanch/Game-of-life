@@ -96,7 +96,7 @@ const BoardMenu = ({
                 onClick={share}
                 labelElement={
                     <span className="bp3-text-muted">
-                        <Icon icon="key-shift" />H
+                        <Icon icon="key-shift" />D
                     </span>
                 }
             />

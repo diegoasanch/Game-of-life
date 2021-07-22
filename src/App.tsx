@@ -2,16 +2,18 @@ import React from 'react';
 import { dark, light } from './styles/colors'
 import { CurrentTheme, ThemeContext } from './context/theme'
 import Game from './pages/Game'
+
 import styled from 'styled-components'
 import { FocusStyleManager, HotkeysProvider } from "@blueprintjs/core"
 import { useLocalStorage } from 'react-use'
+import SavedGame from './pages/SavedGame'
+
+import SharedGame from './pages/SharedGame'
 import  {
   HashRouter as Router,
   Switch,
   Route,
 } from 'react-router-dom'
-import SavedGame from './pages/SavedGame';
-import SharedGame from './pages/SharedGame';
 
 FocusStyleManager.onlyShowFocusOnTabs();
 

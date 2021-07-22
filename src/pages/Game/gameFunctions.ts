@@ -127,7 +127,7 @@ export const createBoard = (rows: number, cols: number, random: boolean, heart=f
     return generateBoard(rows, cols, random)
 }
 
-export const saved_label = (name: string): string => `saved/${name.replace(' ', '_')}`
+export const saved_label = (name: string): string => `saved/${name.replaceAll(' ', '_')}`
 
 
 export const board_to_saved_format = (to_save: IBoard): ISavedBoard => (

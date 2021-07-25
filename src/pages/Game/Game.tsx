@@ -20,9 +20,10 @@ const PageContainer = styled.div<IthemeProp>`
 `
 const SideContainer = styled.div`
     width: 20vw;
+    max-width: 330px;
 `
 const MainContainer = styled.div`
-    width: calc(100% - 20vw);
+    /* width: calc(100% - 20vw); */
     display: flex;
     flex-direction: column;
     align-items: center;

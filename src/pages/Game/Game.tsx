@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Sidebar from '../../components/Sidebar'
 import CellGrid from '../../components/CellGrid'
-import { numInputCallback, SetNumValue } from '../../types/inputs'
 import { boardData, ISavedBoard } from '../../types/cells'
 import { GameContextProvider, ToggleCellState, useGameContext, useGameHotkeysConfig } from '../../context/game';
 import { useInterval } from 'react-use';
@@ -51,15 +50,13 @@ const GameWrapper = (props: GameProps) => {
 }
 
 const Game = ({ fromStorage, loadedBoard, isLoading }: GameProps) => {
-
     const {
         colCount,
         rowCount,
-        content, setContent,
+        setContent,
         setResetCheckpoint,
         speed,
         isPlaying,
-        highlightNew,
         setName,
         toggleState,
         iterateOnce,
@@ -79,7 +76,6 @@ const Game = ({ fromStorage, loadedBoard, isLoading }: GameProps) => {
             checkpoint = createBoard(rowCount, colCount, false, true)
         }
         setResetCheckpoint(checkpoint)
-
     // eslint-disable-next-line
     }, [fromStorage, loadedBoard?.board_content])
 
@@ -97,17 +93,15 @@ const Game = ({ fromStorage, loadedBoard, isLoading }: GameProps) => {
                     <BoardMenu />
                 }>
                     <PageContainer>
+
                         <SideContainer>
                             <Sidebar />
                         </SideContainer>
 
-                            <MainContainer>
-                                <CellGrid
-                                    rows={content}
-                                    highlightNew={!!highlightNew}
-                                    isLoading={!!isLoading}
-                                />
+                        <MainContainer>
+                            <CellGrid isLoading={!!isLoading} />
                         </MainContainer>
+
                     </PageContainer>
                 </ResizedContextMenu>
             </ToggleCellState.Provider>

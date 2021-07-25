@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { cellContent } from '../../types/cells'
 import { H1, Spinner } from '@blueprintjs/core'
 import Cell from '../Cell'
+import { useGameContext } from '../../context/game'
 
 const Container = styled.div`
     position: relative;
@@ -30,12 +30,14 @@ const Row = styled.div`
 `
 
 interface Iprops {
-    rows: cellContent[][] | undefined,
-    highlightNew: boolean,
     isLoading: boolean
 }
 
-const CellGrid = ({ rows, highlightNew, isLoading }: Iprops) => {
+const CellGrid = ({ isLoading }: Iprops) => {
+    const {
+        content: rows,
+        highlightNew
+    } = useGameContext()
 
     return (
         <Container>

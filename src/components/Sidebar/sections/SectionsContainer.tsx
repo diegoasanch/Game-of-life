@@ -1,4 +1,5 @@
-import { H5, Tag } from "@blueprintjs/core"
+import React from 'react'
+import { Tag } from "@blueprintjs/core"
 import styled from "styled-components"
 import { Settings } from "./Settings"
 import { SidebarSection, SidebarSectionProps } from "./SidebarSection"

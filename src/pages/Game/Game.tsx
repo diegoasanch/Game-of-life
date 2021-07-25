@@ -2,11 +2,10 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Sidebar from '../../components/Sidebar'
 import CellGrid from '../../components/CellGrid'
-import { boardData, ISavedBoard } from '../../types/cells'
+import { ISavedBoard } from '../../types/cells'
 import { GameContextProvider, ToggleCellState, useGameContext, useGameHotkeysConfig } from '../../context/game';
 import { useInterval } from 'react-use';
 import { IthemeProp } from '../../types/styles'
-import { createBoard } from './gameFunctions'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
 import { useHotkeys } from "@blueprintjs/core";

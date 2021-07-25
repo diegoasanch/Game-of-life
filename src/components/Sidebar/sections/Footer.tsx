@@ -23,7 +23,7 @@ const Stats = styled.footer`
     justify-self: end;
     margin-top: 8px;
     width: 100%;
-    background-color: ${props => props.theme.sidebar};
+    background-color: ${props => props.theme.sidebar + '33'};
 `
 
 export const Footer = () => {

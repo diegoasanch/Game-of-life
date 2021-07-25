@@ -5,6 +5,8 @@ export class Board implements IBoard {
     public created = new Date()
     public edited =  new Date()
     public board_content: boardData = [[]]
+    public rows = 0
+    public cols = 0
 
     constructor(loaded_board: ISavedBoard | null, board_content?: boardData, name?: string) {
 
@@ -22,6 +24,9 @@ export class Board implements IBoard {
             this.edited = new Date()
             this.board_content = board_content
         }
+
+        this.rows = this.getRows()
+        this.cols = this.getCols()
     }
 
     getRows() {
@@ -32,9 +37,3 @@ export class Board implements IBoard {
         return this.board_content[0].length
     }
 }
-
-// export class Board {
-//     constructor() {
-//         console.log("Dummy board")
-//     }
-// }

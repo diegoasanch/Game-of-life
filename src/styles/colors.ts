@@ -11,6 +11,7 @@ export const dark: Itheme = {
     header: '#19A6FF',
     scrollBarBg: '#4F585D',
     scrollBarThumb: '#2F3437',
+    scrollBarThumbHover: '#1C1F21',
 }
 export const light: Itheme = {
     background: '#EBEBEB',
@@ -21,6 +22,7 @@ export const light: Itheme = {
     cellDead: '#EEEEEE',
     cellHover: '#48AFF0',
     header: '#19A6FF',
-    scrollBarBg: '#EBEBEB',
+    scrollBarBg: '#B7B7B7',
     scrollBarThumb: '#888888',
+    scrollBarThumbHover: '#212121',
 }

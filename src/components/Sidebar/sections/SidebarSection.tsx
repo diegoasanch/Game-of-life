@@ -19,6 +19,10 @@ const StyledCollapse = styled(Collapse)`
     padding-left: .5em;
 `
 
+const StyledSection = styled.section`
+    width: 100%;
+`
+
 export const SidebarSection = ({ name, startOpen, Component }: SidebarSectionProps) => {
     const [isOpen, setIsOpen] = useState(startOpen)
 
@@ -27,7 +31,7 @@ export const SidebarSection = ({ name, startOpen, Component }: SidebarSectionPro
     }
 
     return (
-        <section>
+        <StyledSection>
             <StyledSectionTitle onClick={toggleOpen}>
                 <h3>
                     <Icon icon={isOpen ? 'chevron-down' : 'chevron-right'} />
@@ -37,6 +41,6 @@ export const SidebarSection = ({ name, startOpen, Component }: SidebarSectionPro
             <StyledCollapse isOpen={isOpen}>
                 { Component }
             </StyledCollapse>
-        </section>
+        </StyledSection>
     )
 }

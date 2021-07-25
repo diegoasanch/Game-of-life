@@ -12,6 +12,8 @@ export interface ISavedBoard {
     created: Date,
     edited: Date,
     board_content: boardData
+    rows: number,
+    cols: number
 }
 
 export interface IBoard extends ISavedBoard {

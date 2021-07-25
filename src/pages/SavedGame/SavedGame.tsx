@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { ISavedBoard } from '../../types/cells'
+import { default_saved_board } from '../../utils/constants'
 import { AppToaster } from '../../utils/toaster'
 import Game from '../Game'
 import { getBoard } from '../Game/gameFunctions'
-
-const default_saved_board: ISavedBoard = {
-    name: 'undefined',
-    created: new Date(),
-    edited: new Date(),
-    board_content: [[], []],
-}
 
 type IUrlParams = {
     name: string,

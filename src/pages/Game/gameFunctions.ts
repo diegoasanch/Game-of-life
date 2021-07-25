@@ -130,31 +130,11 @@ export const createBoard = (rows: number, cols: number, random: boolean, heart=f
 export const saved_label = (name: string): string => `saved/${name.replaceAll(' ', '_')}`
 
 
-export const board_to_saved_format = (to_save: IBoard): ISavedBoard => (
-    {
-        name: to_save.name,
-        created: to_save.created,
-        edited: to_save.edited,
-        board_content: to_save.board_content,
-    }
-)
-
-export const saveBoard = (to_save: IBoard): void => {
-    const storage_key = saved_label(to_save.name)
-
-    if (window.localStorage.hasOwnProperty(storage_key)) {
-        to_save.edited = new Date();
-    }
-    const formated_board = board_to_saved_format(to_save)
-    const serialized_board = JSON.stringify(formated_board)
-
-    window.localStorage.setItem(storage_key, serialized_board)
-}
-
 export const getBoard = (name: string): Promise<ISavedBoard | undefined> => {
 
     return new Promise((resolve, reject) => {
         if (window.localStorage.hasOwnProperty(saved_label(name))) { // saved entry
+            console.log(`Getting ${name} board from localstorage`)
             const board_string = window.localStorage.getItem(saved_label(name)) ?? '{}'
             const parsed_board = JSON.parse(board_string)
             const default_content: boardData = [[]]
@@ -164,10 +144,11 @@ export const getBoard = (name: string): Promise<ISavedBoard | undefined> => {
                 created: parsed_board.created ?? new Date(),
                 edited: parsed_board.edited ?? new Date(),
                 board_content: parsed_board.board_content ?? default_content,
+                rows: parsed_board.board_content?.length ?? 0,
+                cols: parsed_board.board_content[0]?.length ?? 0
             }
             return resolve(loaded_board)
         }
         return resolve(undefined)
     })
-
 }

@@ -10,6 +10,8 @@ import  {
   Route,
 } from 'react-router-dom'
 import { ThemeProvider, useThemeContext } from './context/theme';
+import { SavedBoardsProvider } from './context/savedBoards';
+import { GameContextProvider } from './context/game';
 
 FocusStyleManager.onlyShowFocusOnTabs();
 
@@ -24,9 +26,9 @@ function App() {
     <HotkeysProvider>
       <ThemeProvider>
         <StyledComponentsThemeProvider>
-          <ThemedPageContainer>
+          <Router basename="/">
+            <ThemedPageContainer>
 
-            <Router basename="/">
               <Switch>
 
                 <Route exact path="/saved/:name">
@@ -42,9 +44,9 @@ function App() {
                 </Route>
 
               </Switch>
-            </Router>
 
-          </ThemedPageContainer>
+            </ThemedPageContainer>
+          </Router>
         </StyledComponentsThemeProvider>
       </ThemeProvider>
     </HotkeysProvider>
@@ -67,9 +69,13 @@ const ThemedPageContainer = ({ children }: any) => {
   const { isDark } = useThemeContext()
 
   return (
-    <Page className={`.bp3-ui-text ${isDark ? 'bp3-dark' : ''}`}>
-      {children}
-    </Page>
+    <GameContextProvider>
+      <SavedBoardsProvider>
+        <Page className={`.bp3-ui-text ${isDark ? 'bp3-dark' : ''}`}>
+          {children}
+        </Page>
+      </SavedBoardsProvider>
+    </GameContextProvider>
   )
 
 }

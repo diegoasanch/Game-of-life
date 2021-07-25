@@ -6,7 +6,7 @@ import { Tooltip2 } from '@blueprintjs/popover2'
 import { useThemeContext } from '../../../context/theme'
 
 const StyledHeader = styled(H1)`
-    font-size: 4em !important;
+    font-size: 3.5em !important;
     line-height: .9em !important;
     font-weight: bold;
     align-self: flex-start;

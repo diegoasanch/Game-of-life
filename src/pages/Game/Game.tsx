@@ -20,11 +20,11 @@ const PageContainer = styled.div<IthemeProp>`
     flex-direction: row;
 `
 const SideContainer = styled.div`
-    width: 270px;
+    width: 17em;
     z-index: 1;
 `
 const MainContainer = styled.div`
-    width: 100%;
+    width: calc(100% - 17em);
     display: flex;
     flex-direction: column;
     align-items: center;

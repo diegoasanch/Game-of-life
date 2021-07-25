@@ -20,5 +20,5 @@ export const light: Itheme = {
     cellDead: '#EEEEEE',
     header: '#19A6FF',
     scrollBarBg: '#EBEBEB',
-    scrollBarThumb: '#888',
+    scrollBarThumb: '#888888',
 }

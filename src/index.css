@@ -7,6 +7,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body ::-webkit-scrollbar-corner {
+  background-color: #EBEBEB
+}
+
+body .bp3-dark ::-webkit-scrollbar-corner {
+  background-color: #2F3437
+}
+
 code {
   color: #0c527e;
   background-color: #dddcdc;
@@ -21,3 +29,4 @@ code {
   color: #59c0ff;
   background-color: #23272c;
 }
+

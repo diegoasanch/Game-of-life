@@ -19,15 +19,15 @@ const PageContainer = styled.div<IthemeProp>`
     flex-direction: row;
 `
 const SideContainer = styled.div`
-    width: 17em;
-    z-index: 1;
+    width: 20vw;
 `
 const MainContainer = styled.div`
-    width: calc(100% - 17em);
+    width: calc(100% - 20vw);
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
+    flex: 1 1;
 `
 const ResizedContextMenu = styled(ContextMenu2)`
     height: 100vh;

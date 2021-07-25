@@ -5,6 +5,7 @@ export type Itheme = {
     cellBorder: string
     cellAlive: string
     cellDead: string
+    cellHover: string
     header: string
     scrollBarBg: string
     scrollBarThumb: string

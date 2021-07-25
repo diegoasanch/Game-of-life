@@ -8,6 +8,16 @@ body {
 }
 
 code {
+  color: #0c527e;
+  background-color: #dddcdc;
+
+  padding: 0.2em 0.5em;
+  border-radius: 0.3em;
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+      monospace;
+}
+.bp3-dark code,
+.bp3-dark .bp3-toast-message code {
+  color: #59c0ff;
+  background-color: #23272c;
 }

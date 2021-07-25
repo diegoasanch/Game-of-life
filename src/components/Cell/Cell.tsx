@@ -2,37 +2,48 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { cellContent } from '../../types/cells'
 import { ToggleCellState } from '../../context/game'
-import { CurrentTheme } from '../../context/theme'
-import { IthemeProp, ICellType } from '../../types/styles'
+import { useThemeContext } from '../../context/theme'
 
-const StyledCell = styled.div<cellContent & IthemeProp & ICellType>`
+type StyledCellProps = {
+    cellColor: string
+}
+
+const StyledCell = styled.div<StyledCellProps>`
     height: 20px;
     width: 20px;
-    background-color: ${props => (
-        props.alive ? ((props.age !== 1 || !props.highlightNew) ? props.theme.cellAlive : props.theme.header) : props.theme.cellDead
-    )};
+    background-color: ${props => props.cellColor };
     border: solid 1px ${props => props.theme.cellBorder};
 `
 
-type Iprops = {
+type CellProps = {
     cellData: cellContent,
     highlightNew: boolean,
 }
 
-const Cell = ({ cellData, highlightNew }: Iprops ) => {
+const Cell = ({ cellData, highlightNew }: CellProps ) => {
     const toggleCell = useContext(ToggleCellState)
-    const theme = useContext(CurrentTheme)
+    const { theme } = useThemeContext()
 
     const handleClick = () => {
         toggleCell(cellData.column, cellData.row)
     }
 
+    const getCellColor = () : string => {
+        let color : string = theme.cellDead
+
+        if (cellData.alive) {
+            if (cellData.age === 1 && highlightNew)
+                color = theme.header
+            else
+                color = theme.cellAlive
+        }
+        return color
+    }
+
     return (
         <StyledCell
-            {...cellData}
+            cellColor={getCellColor()}
             onClick={handleClick}
-            theme={theme}
-            highlightNew={highlightNew}
         />
     )
 }

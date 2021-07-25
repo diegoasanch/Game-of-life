@@ -45,6 +45,7 @@ const useSavedBoards = () => {
         saveBoardToLocalStorage(to_save)
         fetchBoards()
         AppToaster.show({ message: `Saved board: "${to_save.name}"`, intent: "success" })
+        goToSaved(to_save.name)
     }
 
     const deleteBoard = (name: string, showToast = true) => {

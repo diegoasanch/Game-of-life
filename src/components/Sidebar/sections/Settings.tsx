@@ -119,7 +119,7 @@ export const Settings = () => {
 
             </ButtonGroup>
             <ButtonGroup>
-                <Tooltip2 content="Reset board" position={Position.TOP}>
+                <Tooltip2 content="Reset board" intent="danger" position={Position.TOP}>
                     <Button
                         onClick={resetBoard}
                         icon="reset"

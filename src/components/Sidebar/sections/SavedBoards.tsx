@@ -54,6 +54,11 @@ export const SavedBoardsInner = () => {
         setName((event.target as HTMLInputElement).value)
     }
 
+    const handleFormSubmit = (event: any) => {
+        event.preventDefault()
+        handleSave()
+    }
+
     return (
         <>
             <StyledCard>
@@ -66,12 +71,14 @@ export const SavedBoardsInner = () => {
                         </>
                     }
                 >
-                    <InputGroup
-                        onChange={handleNameChange}
-                        value={name}
-                        placeholder="untitled_board"
-                        id="name-input"
-                    />
+                    <form onSubmit={handleFormSubmit}>
+                        <InputGroup
+                            onChange={handleNameChange}
+                            value={name}
+                            placeholder="untitled_board"
+                            id="name-input"
+                        />
+                    </form>
                     <Button
                         className="save-btn"
                         text={"Save"}

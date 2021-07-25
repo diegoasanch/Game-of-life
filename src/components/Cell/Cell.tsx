@@ -52,7 +52,7 @@ const Cell = ({ cellData, highlightNew }: CellProps ) => {
         }
         setCellColor(colors)
     // eslint-disable-next-line
-    }, [cellData, highlightNew])
+    }, [cellData, highlightNew, theme])
 
     return (
         <StyledCell

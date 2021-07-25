@@ -4,7 +4,6 @@ import Sidebar from '../../components/Sidebar'
 import CellGrid from '../../components/CellGrid'
 import { ISavedBoard } from '../../types/cells'
 import { ToggleCellState, useGameContext, useGameHotkeysConfig } from '../../context/game';
-import { useInterval } from 'react-use';
 import { IthemeProp } from '../../types/styles'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
@@ -47,20 +46,13 @@ type GameProps = {
 
 const Game = ({ loadedBoard, isLoading }: GameProps) => {
     const {
-        speed,
-        isPlaying,
         toggleState,
-        iterateOnce,
         setLoadedBoard
     } = useGameContext()
 
     useEffect(() => {
         setLoadedBoard(loadedBoard)
     }, [loadedBoard, setLoadedBoard])
-
-    useInterval(() => {
-        iterateOnce()
-    }, isPlaying ? (1000 / speed) : null)
 
     const { hotkeysConfig } = useGameHotkeysConfig()
     const { handleKeyDown, handleKeyUp } = useHotkeys(hotkeysConfig)

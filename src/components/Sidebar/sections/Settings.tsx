@@ -10,20 +10,10 @@ const SettingsContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: auto;
     width: 100%;
-    margin-bottom: 4.5em;
 
     > * {
         margin: .5em 0;
-    }
-    &::-webkit-scrollbar {
-        background-color: ${props => props.theme.scrollBarBg};
-        width: 5px;
-        height: 5px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: ${props => props.theme.scrollBarThumb};
     }
 `
 

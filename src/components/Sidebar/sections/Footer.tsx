@@ -18,10 +18,6 @@ const Shoutout = styled(H6)`
 `
 
 const Stats = styled.footer`
-    position: absolute;
-    bottom: 5px;
-    left: 10px;
-
     display: flex;
     flex-direction: column;
     align-items: flex-start;

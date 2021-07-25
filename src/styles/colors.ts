@@ -8,8 +8,8 @@ export const dark: Itheme = {
     cellAlive: '#0E0F1E',
     cellDead: '#586268',
     header: '#19A6FF',
-    scrollBarBg: '#2F3437',
-    scrollBarThumb: '#151515',
+    scrollBarBg: '#4F585D',
+    scrollBarThumb: '#2F3437',
 }
 export const light: Itheme = {
     background: '#EBEBEB',

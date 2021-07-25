@@ -27,7 +27,7 @@ const BoardMenu = () => {
         name,
         content,
         setName,
-        getShareableLink: share
+        getShareableLink
     } = useGameContext()
 
     const { saveBoard } = useSavedBoardsContext()
@@ -38,6 +38,10 @@ const BoardMenu = () => {
 
     const handleSave = () => {
         saveBoard(new Board(null, content, name))
+    }
+
+    const handleShare = () => {
+        getShareableLink()
     }
 
     return (
@@ -94,7 +98,7 @@ const BoardMenu = () => {
             <MenuItem
                 text="Share"
                 icon="share"
-                onClick={share as () => void}
+                onClick={handleShare}
                 labelElement={
                     <span className="bp3-text-muted">
                         <Icon icon="key-shift" />D

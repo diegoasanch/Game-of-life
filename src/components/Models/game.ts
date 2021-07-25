@@ -24,7 +24,6 @@ export class Board implements IBoard {
             this.edited = new Date()
             this.board_content = board_content
         }
-
         this.rows = this.getRows()
         this.cols = this.getCols()
     }
@@ -34,6 +33,6 @@ export class Board implements IBoard {
     }
 
     getCols() {
-        return this.board_content[0].length
+        return this.board_content[0]?.length ?? 0
     }
 }

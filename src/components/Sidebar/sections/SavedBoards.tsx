@@ -3,7 +3,7 @@ import { useSavedBoardsContext } from '../../../context/savedBoards';
 import { SidebarItemContainer } from './styles';
 import styled from 'styled-components';
 import { BoardItem } from './BoardItem';
-import { Icon, InputGroup, FormGroup, Button, Card } from "@blueprintjs/core";
+import { Icon, InputGroup, FormGroup, Button, Card, Callout, H4 } from "@blueprintjs/core";
 import { useGameContext } from '../../../context/game';
 import { Board } from '../../Models/game';
 import { SidebarSection } from './SidebarSection';
@@ -94,7 +94,13 @@ export const SavedBoardsInner = () => {
                 startOpen
                 Component={
                     <>
-                        { boards.map(board => <BoardItem key={"saved_board_" + board.name} {...board} />)}
+                        { boards.length > 0 && boards.map(board => <BoardItem key={"saved_board_" + board.name} {...board} />)}
+                        { !boards.length && (
+                            <Callout intent="primary">
+                                <H4>No saved boards...</H4>
+                                Save a board and it will apear here.
+                            </Callout>
+                        )}
                     </>
                 }
             />

@@ -6,6 +6,7 @@ import { base64ToBoard } from '../../utils/url'
 import { default_saved_board } from '../../utils/constants'
 
 type IUrlParams = {
+    name?: string,
     dimensions: string,
     content: string,
 }
@@ -18,19 +19,19 @@ const notifyInvalid = () => {
 
 function SharedGame() {
 
-    const { dimensions, content } = useParams<IUrlParams>()
+    const { name, dimensions, content } = useParams<IUrlParams>()
     const [savedBoard, setSavedBoard] = useState(default_saved_board)
     const [isLoading, setIsLoading] = useState(true)
 
-    const createBoard = (rows: number, cols: number, content: string): Promise<void> => {
+    const createBoard = (rows: number, cols: number, boardContent: string): Promise<void> => {
         return new Promise((resolve, reject) => {
             let generated_board
 
             try {
-                if (rows && cols && content) {
-                    generated_board = base64ToBoard(rows, cols, content)
-                    showToast(`Loaded shared ${rows} x ${cols} board`, "primary")
-                    setSavedBoard(generated_board)
+                if (rows && cols && boardContent) {
+                    generated_board = base64ToBoard(rows, cols, boardContent)
+                    showToast(`Loaded ${rows} x ${cols} board` + (name ? `: ${name}` : ''), "primary")
+                    setSavedBoard({ ...generated_board, name: name ?? 'untitled_board' })
                     return resolve()
                 }
                 throw new Error('invalid board')
@@ -54,7 +55,7 @@ function SharedGame() {
             parsed_rows = side
             parsed_cols = side
         }
-        console.log({ dimensions, parsed_rows, parsed_cols, content})
+        console.log({ dimensions, parsed_rows, parsed_cols, content, name})
 
         const call_create = async () => {
             setIsLoading(true)
@@ -69,7 +70,7 @@ function SharedGame() {
         }
         call_create()
 
-    }, [dimensions, content])
+    }, [dimensions, content, name])
 
     return (
         <Game loadedBoard={savedBoard} isLoading={isLoading} />

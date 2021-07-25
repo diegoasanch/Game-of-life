@@ -26,8 +26,13 @@ const MainContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
+    height: calc(100% - 2px);
     flex: 1 1;
+    border: 1px solid ${props => props.theme.background};
+
+    &:hover {
+        border: 1px solid ${props => props.theme.cellHover};
+    }
 `
 const ResizedContextMenu = styled(ContextMenu2)`
     height: 100vh;

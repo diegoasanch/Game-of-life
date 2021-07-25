@@ -31,7 +31,7 @@ const MainContainer = styled.div`
     border: 1px solid ${props => props.theme.background};
 
     &:hover {
-        border: 1px solid ${props => props.theme.cellHover};
+        border: 1px solid ${props => props.theme.cellHover  + props.theme.highlightTransparency};
     }
 `
 const ResizedContextMenu = styled(ContextMenu2)`
@@ -61,8 +61,8 @@ const Game = ({ loadedBoard, isLoading }: GameProps) => {
         iterateOnce()
     }, isPlaying ? (1000 / speed) : null)
 
-    const hotKeysConfig = useGameHotkeysConfig()
-    const { handleKeyDown, handleKeyUp } = useHotkeys(hotKeysConfig)
+    const { hotkeysConfig } = useGameHotkeysConfig()
+    const { handleKeyDown, handleKeyUp } = useHotkeys(hotkeysConfig)
 
     return (
         <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>

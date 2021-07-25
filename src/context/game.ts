@@ -83,8 +83,9 @@ export const useGame = () => {
         }
     }
 
-    const getShareableLink = () => {
-        const link = getGameLink(new Board(null, content, name))
+    const getShareableLink = (board?: boardData) => {
+        const toConvert = board ?? content
+        const link = getGameLink(new Board(null, toConvert, name))
         navigator.clipboard.writeText(link)
         showToast('Link copied to clipboard.', 'primary')
     }
@@ -156,6 +157,7 @@ export const useGameHotkeysConfig = () => {
         saveBoard(new Board(null, content, name))
     }, [saveBoard, content, name])
 
+
     const hotkeysConfig = useMemo<HotkeyConfig[]>(() => ([
         {
             combo: 'p',
@@ -209,7 +211,7 @@ export const useGameHotkeysConfig = () => {
             combo: 'shift + d',
             global: true,
             label: "Share board",
-            onKeyDown: getShareableLink
+            onKeyDown: getShareableLink as () => void
         },
     // eslint-disable-next-line
     ]), [
@@ -225,5 +227,5 @@ export const useGameHotkeysConfig = () => {
         toggleTheme
     ])
 
-    return hotkeysConfig
+    return { hotkeysConfig }
 }

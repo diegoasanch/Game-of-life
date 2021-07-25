@@ -94,7 +94,7 @@ const BoardMenu = () => {
             <MenuItem
                 text="Share"
                 icon="share"
-                onClick={share}
+                onClick={share as () => void}
                 labelElement={
                     <span className="bp3-text-muted">
                         <Icon icon="key-shift" />D

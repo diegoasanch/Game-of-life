@@ -1,7 +1,10 @@
-import { Card, H6, ButtonGroup, Button } from '@blueprintjs/core';
+import { Card, H6, ButtonGroup, Button, Position } from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import styled from "styled-components"
+import { useGameContext } from '../../../context/game';
 import { useSavedBoardsContext } from '../../../context/savedBoards';
 import { ISavedBoard } from "../../../types/cells"
+import { getGameLink } from '../../../utils/url';
 
 const StyledCard = styled(Card)`
     width: 100%;
@@ -26,8 +29,9 @@ const StyledName = styled.div`
     }
 `
 
-export const BoardItem = ({ name, cols, rows }: ISavedBoard) => {
+export const BoardItem = ({ name, cols, rows, board_content }: ISavedBoard) => {
     const { goToSaved, deleteBoard } = useSavedBoardsContext()
+    const { getShareableLink } = useGameContext()
 
     const openBoard = () => {
         goToSaved(name)
@@ -36,6 +40,12 @@ export const BoardItem = ({ name, cols, rows }: ISavedBoard) => {
     const handleDeleteBoard = () => {
         deleteBoard(name)
     }
+
+    const handleShareBoard = () => {
+        getShareableLink(board_content)
+    }
+
+
 
     return (
         <StyledCard interactive>
@@ -46,8 +56,22 @@ export const BoardItem = ({ name, cols, rows }: ISavedBoard) => {
                 </small>
             </StyledName>
             <ButtonGroup minimal>
-                <Button icon="document-open" onClick={openBoard} />
-                <Button icon="trash" intent="danger" onClick={handleDeleteBoard} />
+                <Tooltip2 content="Open" position={Position.TOP} minimal>
+                    <Button icon="document-open" onClick={openBoard} />
+                </Tooltip2>
+
+                <Tooltip2 content="Share" position={Position.TOP} minimal>
+                    <Button icon="link" onClick={handleShareBoard} />
+                </Tooltip2>
+
+                <Tooltip2
+                    content="Delete"
+                    position={Position.TOP}
+                    minimal
+                    intent="danger"
+                >
+                    <Button icon="trash" intent="danger" onClick={handleDeleteBoard} />
+                </Tooltip2>
             </ButtonGroup>
         </StyledCard>
     )

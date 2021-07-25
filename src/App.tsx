@@ -38,7 +38,7 @@ function App() {
                 </Route>
 
                 <Route path="/" exact>
-                  <Game fromStorage={false} />
+                  <Game />
                 </Route>
 
               </Switch>

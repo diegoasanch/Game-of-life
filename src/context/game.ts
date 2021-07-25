@@ -1,7 +1,7 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
 import { useInterval, useLocalStorage } from 'react-use'
 import { createBoard, deep_copy, nextCycle, saveBoard, saved_label } from '../pages/Game/gameFunctions'
-import { boardData } from '../types/cells'
+import { boardData, ISavedBoard } from '../types/cells';
 import { showToast } from '../utils/toaster'
 import { HotkeyConfig } from '@blueprintjs/core';
 import { Board } from '../components/Models/game'
@@ -22,6 +22,7 @@ export const useGame = () => {
     const [iterationCount, setIterationCount] = useState(0)
     const [highlightNew, setHighlightNew] = useLocalStorage('highlightNew', false)
     const [name, setName] = useState('')
+    const [loadedBoard, setLoadedBoard] = useState<ISavedBoard>()
     const history = useHistory()
 
     const toggleState = (col: number, row: number) : void => {
@@ -87,8 +88,20 @@ export const useGame = () => {
     }
 
     useEffect(() => {
-        initializeBoard(rowCount, colCount)
-    }, [rowCount, colCount])
+        let checkpoint: boardData | undefined;
+
+        if (loadedBoard) {
+            setContent(loadedBoard.board_content)
+            setName(loadedBoard.name)
+            checkpoint = loadedBoard.board_content
+        }
+        else {
+            console.log('Initialize heart board')
+            initializeBoard(rowCount, colCount, false, true)
+            checkpoint = createBoard(rowCount, colCount, false, true)
+        }
+        setResetCheckpoint(checkpoint)
+    }, [rowCount, colCount, loadedBoard])
 
     useInterval(() => {
         iterateOnce()
@@ -113,7 +126,8 @@ export const useGame = () => {
         toggleHighlightNew,
         handleSave,
         getShareableLink,
-        initializeBoard
+        initializeBoard,
+        loadedBoard, setLoadedBoard
     }
 }
 

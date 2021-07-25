@@ -79,7 +79,7 @@ function SharedGame() {
     }, [dimensions, content])
 
     return (
-        <Game fromStorage={true} loadedBoard={savedBoard} isLoading={isLoading} />
+        <Game loadedBoard={savedBoard} isLoading={isLoading} />
     )
 }
 

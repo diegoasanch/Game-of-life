@@ -36,7 +36,6 @@ const ResizedContextMenu = styled(ContextMenu2)`
 `
 
 type GameProps = {
-    fromStorage: boolean,
     loadedBoard?: ISavedBoard,
     isLoading?: boolean,
 }
@@ -49,35 +48,18 @@ const GameWrapper = (props: GameProps) => {
     )
 }
 
-const Game = ({ fromStorage, loadedBoard, isLoading }: GameProps) => {
+const Game = ({ loadedBoard, isLoading }: GameProps) => {
     const {
-        colCount,
-        rowCount,
-        setContent,
-        setResetCheckpoint,
         speed,
         isPlaying,
-        setName,
         toggleState,
         iterateOnce,
-        initializeBoard
+        setLoadedBoard
     } = useGameContext()
 
     useEffect(() => {
-        let checkpoint: boardData | undefined;
-
-        if (fromStorage) {
-            setContent(loadedBoard?.board_content)
-            setName(loadedBoard?.name ?? 'untitled_board')
-            checkpoint = loadedBoard?.board_content
-        }
-        else {
-            initializeBoard(rowCount, colCount, false, true)
-            checkpoint = createBoard(rowCount, colCount, false, true)
-        }
-        setResetCheckpoint(checkpoint)
-    // eslint-disable-next-line
-    }, [fromStorage, loadedBoard?.board_content])
+        setLoadedBoard(loadedBoard)
+    }, [loadedBoard, setLoadedBoard])
 
     useInterval(() => {
         iterateOnce()

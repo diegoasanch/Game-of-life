@@ -1,5 +1,7 @@
-import { Card, H6, ButtonGroup, Button, Position } from '@blueprintjs/core';
+import { Card, ButtonGroup, Button, Position, EditableText, Icon } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import { useState } from 'react';
+import { useDebounce } from 'react-use';
 import styled from "styled-components"
 import { useGameContext } from '../../../context/game';
 import { useSavedBoardsContext } from '../../../context/savedBoards';
@@ -13,6 +15,22 @@ const StyledCard = styled(Card)`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    .bp3-button-group {
+        opacity: .4;
+    }
+
+    .editIcon {
+        opacity: 0;
+        margin-left: .5em;
+    }
+
+    &:hover .bp3-button-group {
+        opacity: 1;
+    }
+    &:hover .editIcon {
+        opacity: 1;
+    }
 `
 
 const StyledName = styled.div`
@@ -28,9 +46,20 @@ const StyledName = styled.div`
     }
 `
 
+const Row = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+`
+
+const StyledEditableText = styled(EditableText)`
+    width: ${props => Math.max(props.value?.length ?? 0, 5) + 'ch'};
+`
+
 export const BoardItem = ({ name, cols, rows, board_content }: ISavedBoard) => {
-    const { goToSaved, deleteBoard } = useSavedBoardsContext()
+    const { goToSaved, deleteBoard, renameBoard } = useSavedBoardsContext()
     const { getShareableLink } = useGameContext()
+    const [localName, setLocalName] = useState(name)
 
     const openBoard = () => {
         goToSaved(name)
@@ -44,16 +73,33 @@ export const BoardItem = ({ name, cols, rows, board_content }: ISavedBoard) => {
         getShareableLink(board_content)
     }
 
+    const handleNameChange = (newValue: string) => {
+        setLocalName(newValue)
+    }
 
+    useDebounce(() => {
+        if (localName !== name)
+            renameBoard(name, localName)
+    }, 500, [localName, renameBoard])
 
     return (
         <StyledCard interactive>
             <StyledName>
-                <H6>{name}</H6>
+                <Row>
+                    <StyledEditableText
+                        value={localName}
+                        onChange={handleNameChange}
+                        maxLength={15}
+                        placeholder="name"
+                        selectAllOnFocus
+                    />
+                    <Icon icon="edit" intent="primary" className="editIcon" iconSize={13} />
+                </Row>
                 <small className="bp3-text-muted">
                     {rows} x { cols}
                 </small>
             </StyledName>
+
             <ButtonGroup minimal>
                 <Tooltip2 content="Open" position={Position.TOP} minimal>
                     <Button icon="document-open" onClick={openBoard} />

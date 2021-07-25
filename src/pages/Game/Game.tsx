@@ -19,7 +19,7 @@ const PageContainer = styled.div<IthemeProp>`
     flex-direction: row;
 `
 const SideContainer = styled.div`
-    width: 20vw;
+    width: 21vw;
     max-width: 330px;
 `
 const MainContainer = styled.div`

@@ -87,7 +87,7 @@ export const SavedBoardsInner = () => {
                 startOpen
                 Component={
                     <>
-                        { boards.map(board => <BoardItem {...board} />)}
+                        { boards.map(board => <BoardItem key={"saved_board_" + board.name} {...board} />)}
                     </>
                 }
             />

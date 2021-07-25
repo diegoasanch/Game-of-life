@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import Sidebar from '../../components/Sidebar'
 import CellGrid from '../../components/CellGrid'
@@ -6,10 +6,8 @@ import { numInputCallback, SetNumValue } from '../../types/inputs'
 import { boardData, ISavedBoard } from '../../types/cells'
 import { ToggleCellState } from '../../context/game'
 import { useInterval, useLocalStorage } from 'react-use';
-import { CurrentTheme, ThemeContext } from '../../context/theme'
 import { IthemeProp } from '../../types/styles'
 import { nextCycle, deep_copy, createBoard, saveBoard, saved_label } from './gameFunctions'
-// import { getGameLink } from './gameFunctions'
 import { getGameLink } from '../../utils/url'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
@@ -17,6 +15,7 @@ import { useHotkeys } from "@blueprintjs/core";
 import { Board } from '../../components/Models/game'
 import { useHistory } from 'react-router-dom'
 import { showToast } from '../../utils/toaster'
+import { useThemeContext } from '../../hooks/useTheme'
 
 const PageContainer = styled.div<IthemeProp>`
     width: 100%;
@@ -49,11 +48,9 @@ type IProps = {
     isLoading?: boolean,
 }
 
-
 const Game = ({ fromStorage, loadedBoard, isLoading }: IProps) => {
 
-    const theme = useContext(CurrentTheme)
-    const { isDark, toggleTheme } = useContext(ThemeContext)
+    const { isDark, toggleTheme } = useThemeContext()
 
     const [colCount, setColCount] = useState(40)
     const [rowCount, setRowCount] = useState(30)
@@ -241,7 +238,7 @@ const Game = ({ fromStorage, loadedBoard, isLoading }: IProps) => {
 
                     />
                 }>
-                    <PageContainer theme={theme}>
+                    <PageContainer>
                         <SideContainer>
                             <Sidebar
                                 rows={rowCount}

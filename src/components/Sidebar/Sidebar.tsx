@@ -1,16 +1,15 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { dark } from '../../styles/colors'
 import SizeInput from '../SizeInput'
-import { Label, Button, ButtonGroup, Position, H1, H3, H4, Divider, Switch, Alignment, Icon, H6 } from "@blueprintjs/core";
+import { Label, Button, ButtonGroup, Position, H3, H4, Divider, Switch, Alignment, H6 } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
 import { numInputCallback, SetNumValue } from '../../types/inputs'
 import SpeedInput from '../SpeedInput'
-import { CurrentTheme } from '../../context/theme'
 import { IthemeProp } from '../../types/styles'
 import { Header } from './Header';
 
-const Container = styled.div<IthemeProp>`
+const Container = styled.div`
     position: relative;
     height: 100%;
     display: flex;
@@ -20,7 +19,7 @@ const Container = styled.div<IthemeProp>`
     align-items: center;
     justify-content: stretch;
 `
-const Stats = styled.footer<IthemeProp>`
+const Stats = styled.footer`
     position: absolute;
     bottom: 5px;
     left: 10px;
@@ -137,27 +136,22 @@ const Sidebar = ({
     randomizeBoard,
     clearBoard,
     iterationCount,
-    isDark,
-    toggleTheme,
     highlightNew,
     toggleHighlightNew,
 }: Iprops) => {
-
-    const theme = useContext(CurrentTheme)
 
     const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         iterateOnce()
     }
 
-
     return (
-        <Container theme={theme}>
+        <Container>
 
-            <Header isDark={isDark} toggleTheme={toggleTheme} />
+            <Header />
 
             <StyledDivider />
 
-            <Settings theme={theme}>
+            <Settings>
 
                 <SectionHeader>Settings</SectionHeader>
 
@@ -240,7 +234,7 @@ const Sidebar = ({
             </Settings>
 
 
-            <Stats theme={theme}>
+            <Stats>
                 <StyledDivider className="divider" />
 
                 <H4>Iteration count: <Count>{iterationCount}</Count></H4>

@@ -1,12 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { CurrentTheme } from '../../context/theme'
 import { cellContent } from '../../types/cells'
-import { IthemeProp } from '../../types/styles'
 import { H1, Spinner } from '@blueprintjs/core'
 import Cell from '../Cell'
 
-const Container = styled.div<IthemeProp>`
+const Container = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
@@ -38,34 +36,30 @@ interface Iprops {
 }
 
 const CellGrid = ({ rows, highlightNew, isLoading }: Iprops) => {
-    const theme = useContext(CurrentTheme)
 
     return (
-        <Container theme={theme}>
-            { isLoading ?
+        <Container>
+            { isLoading &&
                 <>
                     <H1>Loading...</H1>
                     <br />
                     <Spinner size={80} intent="primary"/>
                 </>
-            :
-                (
-                (rows?.length && rows[0].length) ?
-                    ( rows.map((row, index) => (
-                        <Row key={`row_${index}`}>
-                            { row.map( cell => (
-                                <Cell
-                                    key={`cell_${cell.row}_${cell.column}`}
-                                    cellData={cell}
-                                    highlightNew={highlightNew}
-                                />
-                            ))}
-                        </Row>
-                    )
-                ))
+            }
+            { !isLoading && rows?.length && rows[0].length ?
+                ( rows.map((row, index) => (
+                    <Row key={`row_${index}`}>
+                        { row.map( cell => (
+                            <Cell
+                                key={`cell_${cell.row}_${cell.column}`}
+                                cellData={cell}
+                                highlightNew={highlightNew}
+                            />
+                        ))}
+                    </Row>
+                )))
                 :
                 <H1>Not enough cells to display 😢</H1>
-            )
             }
         </Container>
     )

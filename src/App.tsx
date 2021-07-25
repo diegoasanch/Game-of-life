@@ -1,19 +1,15 @@
 import React from 'react';
-import { dark, light } from './styles/colors'
-import { CurrentTheme, ThemeContext } from './context/theme'
 import Game from './pages/Game'
-
-import styled from 'styled-components'
+import styled, { ThemeProvider as StyledThemeProvider } from 'styled-components'
 import { FocusStyleManager, HotkeysProvider } from "@blueprintjs/core"
-import { useLocalStorage } from 'react-use'
 import SavedGame from './pages/SavedGame'
-
 import SharedGame from './pages/SharedGame'
 import  {
   HashRouter as Router,
   Switch,
   Route,
 } from 'react-router-dom'
+import { ThemeProvider, useThemeContext } from './hooks/useTheme';
 
 FocusStyleManager.onlyShowFocusOnTabs();
 
@@ -23,22 +19,12 @@ const Page = styled.div`
 `
 
 function App() {
-  const [isDark, setIsDark] = useLocalStorage('isDark', true)
-
-  const toggleTheme = () => {
-    setIsDark(!isDark)
-  }
 
   return (
     <HotkeysProvider>
-      <CurrentTheme.Provider value={isDark ? dark : light}>
-        <ThemeContext.Provider value={
-            {
-              isDark: !!isDark,
-              toggleTheme,
-            }
-        }>
-          <Page className={`.bp3-ui-text ${isDark ? 'bp3-dark' : ''}`}>
+      <ThemeProvider>
+        <StyledComponentsThemeProvider>
+          <ThemedPageContainer>
 
             <Router basename="/">
               <Switch>
@@ -58,11 +44,32 @@ function App() {
               </Switch>
             </Router>
 
-          </Page>
-        </ThemeContext.Provider>
-      </CurrentTheme.Provider>
+          </ThemedPageContainer>
+        </StyledComponentsThemeProvider>
+      </ThemeProvider>
     </HotkeysProvider>
   );
 }
 
 export default App;
+
+const StyledComponentsThemeProvider = ({ children }: any) => {
+  const { theme, isDark, toggleTheme } = useThemeContext()
+
+  return (
+    <StyledThemeProvider theme={{ ...theme, isDark, toggleTheme }}>
+      {children}
+    </StyledThemeProvider>
+  )
+}
+
+const ThemedPageContainer = ({ children }: any) => {
+  const { isDark } = useThemeContext()
+
+  return (
+    <Page className={`.bp3-ui-text ${isDark ? 'bp3-dark' : ''}`}>
+      {children}
+    </Page>
+  )
+
+}

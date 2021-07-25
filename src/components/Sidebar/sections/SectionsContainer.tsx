@@ -13,6 +13,13 @@ const StyledSectionsContainer = styled.div`
     overflow-y: scroll;
     padding-right: 2px;
 
+    border: 1px solid ${props => props.theme.sidebar};
+    /* border-radius: ${BORDER_RADIUS}; */
+
+    &:hover {
+        border: 1px solid ${props => props.theme.cellHover};
+    }
+
     &::-webkit-scrollbar {
         background-color: ${props => props.theme.sidebar};
         width: 7px;

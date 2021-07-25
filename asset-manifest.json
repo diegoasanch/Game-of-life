@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Game-of-life/static/css/main.f77945dd.chunk.css",
-    "main.js": "/Game-of-life/static/js/main.aafdbef5.chunk.js",
-    "main.js.map": "/Game-of-life/static/js/main.aafdbef5.chunk.js.map",
+    "main.js": "/Game-of-life/static/js/main.b4405089.chunk.js",
+    "main.js.map": "/Game-of-life/static/js/main.b4405089.chunk.js.map",
     "runtime-main.js": "/Game-of-life/static/js/runtime-main.835a7a88.js",
     "runtime-main.js.map": "/Game-of-life/static/js/runtime-main.835a7a88.js.map",
     "static/css/2.af19bcbf.chunk.css": "/Game-of-life/static/css/2.af19bcbf.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.af19bcbf.chunk.css",
     "static/js/2.364834bd.chunk.js",
     "static/css/main.f77945dd.chunk.css",
-    "static/js/main.aafdbef5.chunk.js"
+    "static/js/main.b4405089.chunk.js"
   ]
 }

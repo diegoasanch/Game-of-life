@@ -1,18 +1,24 @@
 export type Itheme = {
-    readonly background: string,
-    readonly text: string,
-    readonly sidebar: string,
-    readonly cellBorder: string,
-    readonly cellAlive: string,
-    readonly cellDead: string,
-    readonly header: string,
-    readonly scrollBarBg: string,
-    readonly scrollBarThumb: string,
+    background: string
+    text: string
+    sidebar: string
+    cellBorder: string
+    cellAlive: string
+    cellDead: string
+    header: string
+    scrollBarBg: string
+    scrollBarThumb: string
+}
+
+export type ThemeDetails = {
+    isDark: boolean
+    toggleTheme: () => void
 }
 
 export type IthemeProp = {
     readonly theme: Itheme,
 }
+
 export type ICellType = {
     readonly highlightNew: boolean,
 }

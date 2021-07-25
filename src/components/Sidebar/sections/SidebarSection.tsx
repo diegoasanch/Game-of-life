@@ -6,6 +6,7 @@ const StyledSectionTitle = styled.div`
     display: flex;
     align-items: center;
     height: 3em;
+    cursor: pointer;
 `
 
 export type SidebarSectionProps = {

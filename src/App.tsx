@@ -9,7 +9,7 @@ import  {
   Switch,
   Route,
 } from 'react-router-dom'
-import { ThemeProvider, useThemeContext } from './hooks/useTheme';
+import { ThemeProvider, useThemeContext } from './context/theme';
 
 FocusStyleManager.onlyShowFocusOnTabs();
 

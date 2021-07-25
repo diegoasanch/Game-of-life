@@ -4,10 +4,11 @@ import { dark } from '../../styles/colors'
 import SizeInput from '../SizeInput'
 import { Label, Button, ButtonGroup, Position, H3, H4, Divider, Switch, Alignment, H6 } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
-import { numInputCallback, SetNumValue } from '../../types/inputs'
 import SpeedInput from '../SpeedInput'
 import { IthemeProp } from '../../types/styles'
 import { Header } from './Header';
+import { useGameContext } from '../../context/game';
+import { numInputCallback, SetNumValue } from '../../types/inputs';
 
 const Container = styled.div`
     position: relative;
@@ -100,61 +101,45 @@ const SizeInputRow = styled.div`
     }
 `
 
-interface Iprops {
-    rows: number,
-    cols: number,
-    setRows: numInputCallback,
-    setCols: numInputCallback,
-    speed: number,
-    setSpeed: SetNumValue,
-    isPlaying: boolean,
-    iterationCount: number,
-    iterateOnce: () => void,
-    resetBoard: () => void,
-    randomizeBoard: () => void,
-    clearBoard: () => void,
-    togglePlaying: () => void,
-    readonly isDark: boolean,
-    toggleTheme: () => void,
-    readonly highlightNew: boolean,
-    toggleHighlightNew: () => void,
-}
+const Sidebar = () => {
+    const {
+        rowCount,
+        colCount,
+        setRowCount,
+        setColCount,
+        iterateOnce,
+        speed,
+        setSpeed,
+        isPlaying,
+        togglePlaying,
+        resetBoard,
+        randomizeBoard,
+        clearBoard,
+        iterationCount,
+        highlightNew,
+        toggleHighlightNew,
+    } = useGameContext()
 
-
-
-const Sidebar = ({
-    rows,
-    cols,
-    setRows,
-    setCols,
-    iterateOnce,
-    speed,
-    setSpeed,
-    isPlaying,
-    togglePlaying,
-    resetBoard,
-    randomizeBoard,
-    clearBoard,
-    iterationCount,
-    highlightNew,
-    toggleHighlightNew,
-}: Iprops) => {
-
+    const handleColInput: numInputCallback = (valueAsNumber, valueAsString, innputElement) => {
+        setColCount(valueAsNumber)
+    }
+    const handleRowInput: numInputCallback = (valueAsNumber, valueAsString, innputElement) => {
+        setRowCount(valueAsNumber)
+    }
+    const handleSpeed: SetNumValue = (value) => {
+        setSpeed(value)
+    }
     const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         iterateOnce()
     }
 
     return (
         <Container>
-
             <Header />
-
             <StyledDivider />
 
             <Settings>
-
                 <SectionHeader>Settings</SectionHeader>
-
                 <Switch
                     alignIndicator={Alignment.RIGHT}
                     checked={highlightNew}
@@ -166,19 +151,19 @@ const Sidebar = ({
                     <Label>
                         Rows
                         <SizeInput
-                            value={rows}
+                            value={rowCount}
                             maxValue={250}
                             placeholder="Row count"
-                            handleInput={setRows}
+                            handleInput={handleRowInput}
                         />
                     </Label>
                     <Label>
                         Columns
                         <SizeInput
-                            value={cols}
+                            value={colCount}
                             maxValue={250}
                             placeholder="Column count"
-                            handleInput={setCols}
+                            handleInput={handleColInput}
                         />
                     </Label>
                 </SizeInputRow>
@@ -187,7 +172,7 @@ const Sidebar = ({
                     <span className="bp3-text-muted"> (Hz)</span>
                     <SpeedInput
                         value={speed}
-                        setValue={setSpeed}
+                        setValue={handleSpeed}
                     />
                 </Label>
 
@@ -232,22 +217,30 @@ const Sidebar = ({
                     </Tooltip2>
                 </ButtonGroup>
             </Settings>
-
-
-            <Stats>
-                <StyledDivider className="divider" />
-
-                <H4>Iteration count: <Count>{iterationCount}</Count></H4>
-                <Shoutout className="bp3-text-muted">
-                    Made with 💖 by&nbsp;
-                    <a href="https://github.com/diegoasanch" target="_blank" rel="noopener noreferrer">
-                        Diego.
-                    </a>
-                </Shoutout>
-
-            </Stats>
+            <Footer iterationCount={iterationCount} />
         </Container>
     )
 }
 
 export default Sidebar
+
+type FooterProps = {
+    iterationCount: number
+}
+
+const Footer = ({ iterationCount }: FooterProps) => {
+    return (
+        <Stats>
+        <StyledDivider className="divider" />
+
+        <H4>Iteration count: <Count>{iterationCount}</Count></H4>
+        <Shoutout className="bp3-text-muted">
+            Made with 💖 by&nbsp;
+            <a href="https://github.com/diegoasanch" target="_blank" rel="noopener noreferrer">
+                Diego.
+            </a>
+        </Shoutout>
+
+    </Stats>
+    )
+}

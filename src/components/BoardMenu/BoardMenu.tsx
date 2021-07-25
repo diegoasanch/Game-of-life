@@ -1,6 +1,7 @@
 import React from 'react'
 import { Menu, MenuItem, MenuDivider, Icon, InputGroup, FormGroup, Button } from "@blueprintjs/core";
 import styled from 'styled-components';
+import { useGameContext } from '../../context/game';
 
 const StyledForm = styled(FormGroup)`
     padding: 0 0 5px 5px;
@@ -12,31 +13,20 @@ const StyledForm = styled(FormGroup)`
     }
 `
 
-interface Iprops {
-    iterateOnce: () => void,
-    isPlaying: boolean,
-    togglePlaying: () => void,
-    resetBoard: () => void,
-    randomizeBoard: () => void,
-    clearBoard: () => void,
-    name: string,
-    setName: (name: string) => void,
-    saveBoard: () => void,
-    share: () => void,
-}
+const BoardMenu = () => {
 
-const BoardMenu = ({
-    iterateOnce,
-    isPlaying,
-    togglePlaying,
-    resetBoard,
-    randomizeBoard,
-    clearBoard,
-    name,
-    setName,
-    saveBoard,
-    share,
-}: Iprops) => {
+    const {
+        iterateOnce,
+        isPlaying,
+        togglePlaying,
+        resetBoard,
+        randomizeBoard,
+        clearBoard,
+        name,
+        setName,
+        handleSave: saveBoard,
+        getShareableLink: share
+    } = useGameContext()
 
     const handleNameChange = (event: React.FormEvent<HTMLElement>) => {
         // console.log({changed_name})

@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { cellContent } from '../../types/cells'
 import { ToggleCellState } from '../../context/game'
-import { useThemeContext } from '../../hooks/useTheme'
+import { useThemeContext } from '../../context/theme'
 
 type StyledCellProps = {
     cellColor: string

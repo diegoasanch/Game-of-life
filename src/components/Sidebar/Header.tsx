@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Alignment, H1, Icon, Position, Switch } from '@blueprintjs/core'
 import packageJson from '../../../package.json'
 import { Tooltip2 } from '@blueprintjs/popover2'
-import { useThemeContext } from '../../hooks/useTheme'
+import { useThemeContext } from '../../context/theme'
 
 const StyledHeader = styled(H1)`
     font-size: 4em !important;

@@ -4,7 +4,6 @@ import styled from "styled-components"
 import { useGameContext } from '../../../context/game';
 import { useSavedBoardsContext } from '../../../context/savedBoards';
 import { ISavedBoard } from "../../../types/cells"
-import { getGameLink } from '../../../utils/url';
 
 const StyledCard = styled(Card)`
     width: 100%;

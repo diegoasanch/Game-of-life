@@ -44,11 +44,13 @@ const useSavedBoards = () => {
     const saveBoard = (to_save: IBoard) => {
         saveBoardToLocalStorage(to_save)
         fetchBoards()
+        AppToaster.show({ message: `Saved board: "${to_save.name}"`, intent: "success" })
     }
 
     const deleteBoard = (name: string) => {
         window.localStorage.removeItem(saved_label(name))
         fetchBoards()
+        AppToaster.show({ message: `Deleted board: "${name}"`, intent: "danger" })
     }
 
     useEffect(() => {

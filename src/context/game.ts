@@ -1,6 +1,6 @@
-import { createContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useEffect, useMemo, useState, useCallback } from 'react';
 import { useInterval, useLocalStorage } from 'react-use'
-import { createBoard, deep_copy, nextCycle, saveBoard, saved_label } from '../pages/Game/gameFunctions'
+import { createBoard, deep_copy, nextCycle, saved_label } from '../pages/Game/gameFunctions'
 import { boardData, ISavedBoard } from '../types/cells';
 import { showToast } from '../utils/toaster'
 import { HotkeyConfig } from '@blueprintjs/core';
@@ -9,14 +9,16 @@ import { useHistory } from 'react-router-dom';
 import { getGameLink } from '../utils/url'
 import { useThemeContext } from './theme'
 import { buildGenericContext } from './genericContext';
+import { saveBoardToLocalStorage, useSavedBoardsContext } from './savedBoards';
+import { default_saved_board } from '../utils/constants';
 
 export const ToggleCellState = createContext((col: number, row: number) => {console.log('Not yet configured')})
 
 export const useGame = () => {
     const [colCount, setColCount] = useState(40)
     const [rowCount, setRowCount] = useState(30)
-    const [content, setContent] = useState<boardData>()
-    const [resetCheckpoint, setResetCheckpoint] = useState<boardData>()
+    const [content, setContent] = useState<boardData>(default_saved_board.board_content)
+    const [resetCheckpoint, setResetCheckpoint] = useState<boardData>(default_saved_board.board_content)
     const [speed, setSpeed] = useState(10)
     const [isPlaying, setIsPlaying] = useState(false)
     const [iterationCount, setIterationCount] = useState(0)
@@ -72,7 +74,7 @@ export const useGame = () => {
     const handleSave = () => {
         if (name.length) {
             console.log(`Saving... ${name}`)
-            saveBoard(new Board(null, content, name))
+            saveBoardToLocalStorage(new Board(null, content, name))
             history.push("/" + saved_label(name))
             showToast(`Saved board: ${name}`, 'success')
         }
@@ -141,12 +143,18 @@ export const useGameHotkeysConfig = () => {
         clearBoard,
         resetBoard,
         toggleHighlightNew,
-        handleSave,
         getShareableLink,
+        content,
+        name,
         highlightNew,
     } = useGameContext()
 
+    const { saveBoard } = useSavedBoardsContext()
     const { toggleTheme } = useThemeContext()
+
+    const handleSave = useCallback(() => {
+        saveBoard(new Board(null, content, name))
+    }, [saveBoard, content, name])
 
     const hotkeysConfig = useMemo<HotkeyConfig[]>(() => ([
         {

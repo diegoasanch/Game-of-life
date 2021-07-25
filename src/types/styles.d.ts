@@ -9,6 +9,7 @@ export type Itheme = {
     header: string
     scrollBarBg: string
     scrollBarThumb: string
+    scrollBarThumbHover: string
 }
 
 export type ThemeDetails = {

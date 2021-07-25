@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { H1, Spinner } from '@blueprintjs/core'
 import Cell from '../Cell'
 import { useGameContext } from '../../context/game'
+import { BORDER_RADIUS } from '../../styles/constants'
 
 const Container = styled.div`
     position: relative;
@@ -12,15 +13,28 @@ const Container = styled.div`
     overflow: scroll;
     height: 100%;
     width: 100%;
+    /* width: max-content; */
     justify-content: center;
 
+    padding: 2em 1em 1em;
+
     &::-webkit-scrollbar {
+        background-color: ${props => props.theme.backgroundColor};
+        width: 10px;
+        height: 10px;
+        border-radius: ${BORDER_RADIUS};
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: ${props => props.theme.scrollBarBg};
+        border-radius: ${BORDER_RADIUS};
+    }
+    &:hover::-webkit-scrollbar {
         background-color: ${props => props.theme.scrollBarBg};
         width: 10px;
         height: 10px;
     }
-    &::-webkit-scrollbar-thumb {
-        background-color: ${props => props.theme.scrollBarThumb};
+    &:hover::-webkit-scrollbar-thumb {
+        background-color: ${props => props.theme.scrollBarThumbHover};
     }
 `
 const Row = styled.div`

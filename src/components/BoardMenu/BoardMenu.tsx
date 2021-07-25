@@ -2,6 +2,8 @@ import React from 'react'
 import { Menu, MenuItem, MenuDivider, Icon, InputGroup, FormGroup, Button } from "@blueprintjs/core";
 import styled from 'styled-components';
 import { useGameContext } from '../../context/game';
+import { useSavedBoardsContext } from '../../context/savedBoards';
+import { Board } from '../Models/game';
 
 const StyledForm = styled(FormGroup)`
     padding: 0 0 5px 5px;
@@ -23,14 +25,19 @@ const BoardMenu = () => {
         randomizeBoard,
         clearBoard,
         name,
+        content,
         setName,
-        handleSave: saveBoard,
         getShareableLink: share
     } = useGameContext()
 
+    const { saveBoard } = useSavedBoardsContext()
+
     const handleNameChange = (event: React.FormEvent<HTMLElement>) => {
-        // console.log({changed_name})
         setName((event.target as HTMLInputElement).value)
+    }
+
+    const handleSave = () => {
+        saveBoard(new Board(null, content, name))
     }
 
     return (
@@ -79,7 +86,7 @@ const BoardMenu = () => {
                     className="save-btn"
                     text={"Save"}
                     icon="floppy-disk"
-                    onClick={saveBoard}
+                    onClick={handleSave}
                     fill
                 />
 

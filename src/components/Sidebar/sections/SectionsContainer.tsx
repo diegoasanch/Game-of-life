@@ -1,8 +1,9 @@
 import React from 'react'
-import { Tag } from "@blueprintjs/core"
 import styled from "styled-components"
 import { Settings } from "./Settings"
 import { SidebarSection, SidebarSectionProps } from "./SidebarSection"
+import { BORDER_RADIUS } from '../../../styles/constants'
+import { SavedBoards } from './SavedBoards';
 
 const StyledSectionsContainer = styled.div`
     display: flex;
@@ -15,11 +16,11 @@ const StyledSectionsContainer = styled.div`
     &::-webkit-scrollbar {
         background-color: ${props => props.theme.sidebar};
         width: 7px;
-        border-radius: 3px;
+        border-radius: ${BORDER_RADIUS};
     }
     &::-webkit-scrollbar-thumb {
         background-color: ${props => props.theme.scrollBarBg};
-        border-radius: 3px;
+        border-radius: ${BORDER_RADIUS};
     }
     &:hover::-webkit-scrollbar {
         background-color: ${props => props.theme.scrollBarBg};
@@ -36,9 +37,9 @@ const sidebarSections: SidebarSectionProps[] = [
         Component: <Settings />,
     },
     {
-        name: 'Saved Boards',
-        startOpen: false,
-        Component: <Tag large minimal>Coming soon...</Tag>,
+        name: 'Boards',
+        startOpen: true,
+        Component: <SavedBoards />,
     },
 ]
 

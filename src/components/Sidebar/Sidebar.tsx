@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Header } from './sections/Header';
 import { Footer } from './sections/Footer';
 import { StyledDivider } from '../../styles/sharedStyledComponents';
-import { Settings } from './sections/Settings';
+import { SectionsContainer } from './sections/SectionsContainer';
 
 const Container = styled.div`
     position: relative;
@@ -22,42 +22,9 @@ const Sidebar = () => {
             <Header />
             <StyledDivider />
             <SectionsContainer />
+            <StyledDivider />
             <Footer />
         </Container>
-    )
-}
-
-const StyledSectionsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    /* outline: 1px solid red; */
-    overflow-y: scroll;
-
-    &::-webkit-scrollbar {
-        background-color: ${props => props.theme.sidebar};
-        width: 7px;
-        border-radius: 3px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: ${props => props.theme.scrollBarThumb};
-        border-radius: 3px;
-    }
-
-    &:hover::-webkit-scrollbar {
-        background-color: ${props => props.theme.scrollBarBg};
-    }
-    &:hover::-webkit-scrollbar-thumb {
-        background-color: ${props => props.theme.scrollBarThumb};
-    }
-`
-
-const SectionsContainer = () => {
-    return (
-        <StyledSectionsContainer>
-            <Settings />
-        </StyledSectionsContainer>
     )
 }
 

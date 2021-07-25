@@ -22,24 +22,15 @@ const Stats = styled.footer`
     flex-direction: column;
     align-items: flex-start;
     justify-self: end;
-    margin-top: 10px;
-    width: 90%;
-    height: 5em;
-
+    margin-top: 8px;
+    width: 100%;
     background-color: ${props => props.theme.sidebar};
-    z-index: 34;
-
-    .divider {
-        margin-bottom: 10px;
-    }
 `
 
 export const Footer = () => {
     const { iterationCount } = useGameContext()
     return (
         <Stats>
-            <StyledDivider className="divider" />
-
             <H4>Iteration count: <Count>{iterationCount}</Count></H4>
             <Shoutout className="bp3-text-muted">
                 Made with 💖 by&nbsp;

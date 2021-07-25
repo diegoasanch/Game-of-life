@@ -18,7 +18,7 @@ const SettingsContainer = styled.div`
 `
 
 const SectionHeader = styled(H3)`
-    align-self: flex-flex-start;
+    align-self: -flex-start;
 `
 
 const SizeInputRow = styled.div`
@@ -66,7 +66,6 @@ export const Settings = () => {
 
     return (
         <SettingsContainer>
-                <SectionHeader>Settings</SectionHeader>
                 <Switch
                     alignIndicator={Alignment.RIGHT}
                     checked={highlightNew}

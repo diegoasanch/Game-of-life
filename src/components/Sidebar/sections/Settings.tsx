@@ -1,4 +1,4 @@
-import { Alignment, Button, ButtonGroup, H3, Label, Position, Switch } from "@blueprintjs/core"
+import { Alignment, Button, ButtonGroup, Label, Position, Switch } from "@blueprintjs/core"
 import { Tooltip2 } from "@blueprintjs/popover2"
 import styled from "styled-components"
 import { useGameContext } from "../../../context/game"
@@ -15,10 +15,6 @@ const SettingsContainer = styled.div`
     > * {
         margin: .5em 0;
     }
-`
-
-const SectionHeader = styled(H3)`
-    align-self: -flex-start;
 `
 
 const SizeInputRow = styled.div`

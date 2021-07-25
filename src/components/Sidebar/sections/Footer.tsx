@@ -1,9 +1,8 @@
-import { H4, H6 } from '@blueprintjs/core'
 import React from 'react'
+import { H4, H6 } from '@blueprintjs/core'
 import styled from 'styled-components'
 import { useGameContext } from '../../../context/game'
 import { dark } from '../../../styles/colors'
-import { StyledDivider } from '../../../styles/sharedStyledComponents'
 
 const Count = styled.span`
     color: ${dark.header};

@@ -3,13 +3,12 @@ import styled from 'styled-components'
 import Sidebar from '../../components/Sidebar'
 import CellGrid from '../../components/CellGrid'
 import { ISavedBoard } from '../../types/cells'
-import { GameContextProvider, ToggleCellState, useGameContext, useGameHotkeysConfig } from '../../context/game';
+import { ToggleCellState, useGameContext, useGameHotkeysConfig } from '../../context/game';
 import { useInterval } from 'react-use';
 import { IthemeProp } from '../../types/styles'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
 import { useHotkeys } from "@blueprintjs/core";
-import { SavedBoardsProvider } from '../../context/savedBoards'
 
 const PageContainer = styled.div<IthemeProp>`
     width: 100%;

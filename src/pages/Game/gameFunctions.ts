@@ -1,4 +1,4 @@
-import { boardData, IBoard, ISavedBoard } from '../../types/cells'
+import { boardData, ISavedBoard } from '../../types/cells'
 
 export const aliveNextCycle = (board: boardData, row: number, col: number): boolean => {
     const ROWS = board.length;

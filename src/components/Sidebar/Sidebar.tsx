@@ -6,9 +6,11 @@ import { Label, Button, ButtonGroup, Position, H3, H4, Divider, Switch, Alignmen
 import { Tooltip2 } from "@blueprintjs/popover2";
 import SpeedInput from '../SpeedInput'
 import { IthemeProp } from '../../types/styles'
-import { Header } from './Header';
+import { Header } from './sections/Header';
 import { useGameContext } from '../../context/game';
 import { numInputCallback, SetNumValue } from '../../types/inputs';
+import { Footer } from './sections/Footer';
+import { StyledDivider } from '../../styles/sharedStyledComponents';
 
 const Container = styled.div`
     position: relative;
@@ -20,34 +22,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: stretch;
 `
-const Stats = styled.footer`
-    position: absolute;
-    bottom: 5px;
-    left: 10px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-self: end;
-    margin-top: 10px;
-    width: 90%;
-    height: 5em;
-
-    background-color: ${props => props.theme.sidebar};
-    z-index: 34;
-
-    .divider {
-        margin-bottom: 10px;
-    }
-`
-
-const Count = styled.span`
-    color: ${dark.header};
-`
-
-const StyledDivider = styled(Divider)`
-    width: 100%;
-`
 const Settings = styled.div<IthemeProp>`
     display: flex;
     flex-direction: column;
@@ -81,14 +56,6 @@ const SectionHeader = styled(H3)`
     align-self: flex-flex-start;
 `
 
-
-const Shoutout = styled(H6)`
-    font-size: .9em !important;
-
-    a &:not(:hover) {
-        color: inherit;
-    }
-`
 const SizeInputRow = styled.div`
     display: flex;
     flex-direction: row;
@@ -115,7 +82,6 @@ const Sidebar = () => {
         resetBoard,
         randomizeBoard,
         clearBoard,
-        iterationCount,
         highlightNew,
         toggleHighlightNew,
     } = useGameContext()
@@ -217,30 +183,9 @@ const Sidebar = () => {
                     </Tooltip2>
                 </ButtonGroup>
             </Settings>
-            <Footer iterationCount={iterationCount} />
+            <Footer />
         </Container>
     )
 }
 
 export default Sidebar
-
-type FooterProps = {
-    iterationCount: number
-}
-
-const Footer = ({ iterationCount }: FooterProps) => {
-    return (
-        <Stats>
-        <StyledDivider className="divider" />
-
-        <H4>Iteration count: <Count>{iterationCount}</Count></H4>
-        <Shoutout className="bp3-text-muted">
-            Made with 💖 by&nbsp;
-            <a href="https://github.com/diegoasanch" target="_blank" rel="noopener noreferrer">
-                Diego.
-            </a>
-        </Shoutout>
-
-    </Stats>
-    )
-}

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Tag } from "@blueprintjs/core"
 import styled from "styled-components"
 import { Settings } from "./Settings"
 import { SidebarSection, SidebarSectionProps } from "./SidebarSection"
 import { BORDER_RADIUS } from '../../../styles/constants'
+import { SavedBoards } from './SavedBoards';
 
 const StyledSectionsContainer = styled.div`
     display: flex;
@@ -37,9 +37,9 @@ const sidebarSections: SidebarSectionProps[] = [
         Component: <Settings />,
     },
     {
-        name: 'Saved Boards',
+        name: 'Boards',
         startOpen: true,
-        Component: <Tag large minimal>Coming soon...</Tag>,
+        Component: <SavedBoards />,
     },
 ]
 

@@ -106,12 +106,13 @@ export const base64ToBoard = (rows: number, cols: number, b64Content: string): I
     // console.log(`Zipped: ${b64Content} \n\n\n Hex: ${b64}\n\n\nBinary: ${bin}`)
 
     const content = generateBoard(rows, cols, false, bin)
-    const board: ISavedBoard = {
+    return {
         name: 'Shared board',
         created: new Date(),
         edited: new Date(),
         board_content: content,
+        rows: content.length,
+        cols: content[0].length,
     }
 
-    return board
 }

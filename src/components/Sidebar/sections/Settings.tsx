@@ -5,17 +5,7 @@ import { useGameContext } from "../../../context/game"
 import { numInputCallback, SetNumValue } from "../../../types/inputs"
 import SizeInput from "../../SizeInput"
 import SpeedInput from "../../SpeedInput"
-
-const SettingsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-
-    > * {
-        margin: .5em 0;
-    }
-`
+import { SidebarItemContainer } from "./styles"
 
 const SizeInputRow = styled.div`
     display: flex;
@@ -61,7 +51,7 @@ export const Settings = () => {
     }
 
     return (
-        <SettingsContainer>
+        <SidebarItemContainer>
                 <Switch
                     alignIndicator={Alignment.RIGHT}
                     checked={highlightNew}
@@ -138,6 +128,6 @@ export const Settings = () => {
                         />
                     </Tooltip2>
                 </ButtonGroup>
-            </SettingsContainer>
+            </SidebarItemContainer>
     )
 }

@@ -9,6 +9,7 @@ import { IthemeProp } from '../../types/styles'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
 import { useHotkeys } from "@blueprintjs/core";
+import { SavedBoardsProvider } from '../../context/savedBoards'
 
 const PageContainer = styled.div<IthemeProp>`
     width: 100%;
@@ -37,14 +38,6 @@ const ResizedContextMenu = styled(ContextMenu2)`
 type GameProps = {
     loadedBoard?: ISavedBoard,
     isLoading?: boolean,
-}
-
-const GameWrapper = (props: GameProps) => {
-    return (
-        <GameContextProvider>
-            <Game {...props} />
-        </GameContextProvider>
-    )
 }
 
 const Game = ({ loadedBoard, isLoading }: GameProps) => {
@@ -90,4 +83,4 @@ const Game = ({ loadedBoard, isLoading }: GameProps) => {
     )
 }
 
-export default GameWrapper
+export default Game

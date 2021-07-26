@@ -12,6 +12,7 @@ export const dark: Itheme = {
     scrollBarBg: '#4F585D',
     scrollBarThumb: '#2F3437',
     scrollBarThumbHover: '#1C1F21',
+    highlightTransparency: '77',
 }
 export const light: Itheme = {
     background: '#EBEBEB',
@@ -25,4 +26,5 @@ export const light: Itheme = {
     scrollBarBg: '#B7B7B7',
     scrollBarThumb: '#888888',
     scrollBarThumbHover: '#212121',
+    highlightTransparency: '99',
 }

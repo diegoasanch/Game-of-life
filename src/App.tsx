@@ -39,6 +39,10 @@ function App() {
                   <SharedGame />
                 </Route>
 
+                <Route exact path="/shared/:name/:dimensions/:content">
+                  <SharedGame />
+                </Route>
+
                 <Route path="/" exact>
                   <Game />
                 </Route>

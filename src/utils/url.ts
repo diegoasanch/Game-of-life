@@ -96,7 +96,7 @@ export const getGameLink = (board: IBoard): string => {
     const b64 = bin_to_base64(bin)
 
     const { host, pathname } = window.location
-    return host + pathname + `#/shared/${rows}x${cols}/${shorten_b64(b64)}`
+    return host + pathname + `#/shared/` + (board.name ? `${board.name}/` : '') + `${rows}x${cols}/${shorten_b64(b64)}`
 }
 
 export const base64ToBoard = (rows: number, cols: number, b64Content: string): ISavedBoard => {

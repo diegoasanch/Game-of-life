@@ -8,3 +8,5 @@ export const default_saved_board: ISavedBoard = {
     rows: 0,
     cols: 0,
 }
+
+export const MAX_NAME_LENGTH = 15

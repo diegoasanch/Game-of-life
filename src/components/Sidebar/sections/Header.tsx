@@ -42,8 +42,8 @@ export const Header = () => {
                 alignIndicator={Alignment.RIGHT}
                 checked={isDark}
                 onChange={toggleTheme}
-                innerLabel="🌞"
-                innerLabelChecked="🌚"
+                innerLabel="light"
+                innerLabelChecked="dark"
                 large
             />
         </HeaderContainer>

@@ -10,6 +10,7 @@ export type Itheme = {
     scrollBarBg: string
     scrollBarThumb: string
     scrollBarThumbHover: string
+    highlightTransparency: string,
 }
 
 export type ThemeDetails = {

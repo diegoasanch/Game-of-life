@@ -11,7 +11,7 @@ const StyledSectionsContainer = styled.div`
     width: 100%;
     height: 100%;
     overflow-y: scroll;
-    padding-right: 2px;
+    padding-right: 4px;
 
     border: 1px solid ${props => props.theme.sidebar};
     /* border-radius: ${BORDER_RADIUS}; */
@@ -23,6 +23,7 @@ const StyledSectionsContainer = styled.div`
     &::-webkit-scrollbar {
         background-color: ${props => props.theme.sidebar};
         width: 7px;
+        height: 7px;
         border-radius: ${BORDER_RADIUS};
     }
     &::-webkit-scrollbar-thumb {

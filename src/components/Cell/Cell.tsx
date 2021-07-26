@@ -15,7 +15,8 @@ const StyledCell = styled.div<CellColors>`
     width: 20px;
     background-color: ${props => props.background };
     border: solid 1px ${props => props.theme.cellBorder};
-    cursor: pointer;
+
+    cursor: cell;
 
     &:hover {
         border: solid 3px ${props => props.hoverBorder };

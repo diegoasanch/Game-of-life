@@ -57,6 +57,7 @@ const Row = styled.div`
 `
 const DetailsRow = styled(Row)`
     width: 90%;
+    max-width: 16ch;
     justify-content: space-between;
 `
 

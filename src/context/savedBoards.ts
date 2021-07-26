@@ -62,6 +62,7 @@ const useSavedBoards = () => {
             toRename.name = newName
             saveBoardToLocalStorage(toRename)
             deleteBoard(oldName, false)
+            goToSaved(newName)
             AppToaster.show({ message: `Renamed board: "${oldName}" -> "${newName}"`, intent: "danger" })
         }
     }

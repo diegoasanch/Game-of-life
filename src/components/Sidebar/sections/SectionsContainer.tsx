@@ -17,7 +17,7 @@ const StyledSectionsContainer = styled.div`
     /* border-radius: ${BORDER_RADIUS}; */
 
     &:hover {
-        border: 1px solid ${props => props.theme.cellHover};
+        border: 1px solid ${props => props.theme.cellHover + props.theme.highlightTransparency};
     }
 
     &::-webkit-scrollbar {

@@ -44,11 +44,27 @@ const useSavedBoards = () => {
     const saveBoard = (to_save: IBoard) => {
         saveBoardToLocalStorage(to_save)
         fetchBoards()
+        AppToaster.show({ message: `Saved board: "${to_save.name}"`, intent: "success" })
+        goToSaved(to_save.name)
     }
 
-    const deleteBoard = (name: string) => {
+    const deleteBoard = (name: string, showToast = true) => {
         window.localStorage.removeItem(saved_label(name))
         fetchBoards()
+        if (showToast)
+            AppToaster.show({ message: `Deleted board: "${name}"`, intent: "danger" })
+    }
+
+    const renameBoard = (oldName: string, newName: string) => {
+        const toRename = boards.find(board => board.name === oldName)
+
+        if (toRename) {
+            toRename.name = newName
+            saveBoardToLocalStorage(toRename)
+            deleteBoard(oldName, false)
+            goToSaved(newName)
+            AppToaster.show({ message: `Renamed board: "${oldName}" -> "${newName}"`, intent: "danger" })
+        }
     }
 
     useEffect(() => {
@@ -60,6 +76,7 @@ const useSavedBoards = () => {
         goToSaved,
         deleteBoard,
         saveBoard,
+        renameBoard,
     }
 }
 
@@ -76,14 +93,13 @@ export const board_to_saved_format = (to_save: IBoard): ISavedBoard => (
     }
 )
 
-export const saveBoardToLocalStorage = (to_save: IBoard): void => {
+export const saveBoardToLocalStorage = (to_save: ISavedBoard): void => {
     const storage_key = saved_label(to_save.name)
 
     if (window.localStorage.hasOwnProperty(storage_key)) {
         to_save.edited = new Date();
     }
-    const formated_board = board_to_saved_format(to_save)
-    const serialized_board = JSON.stringify(formated_board)
+    const serialized_board = JSON.stringify(to_save)
 
     window.localStorage.setItem(storage_key, serialized_board)
 }

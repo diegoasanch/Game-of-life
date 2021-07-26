@@ -4,7 +4,6 @@ import Sidebar from '../../components/Sidebar'
 import CellGrid from '../../components/CellGrid'
 import { ISavedBoard } from '../../types/cells'
 import { ToggleCellState, useGameContext, useGameHotkeysConfig } from '../../context/game';
-import { useInterval } from 'react-use';
 import { IthemeProp } from '../../types/styles'
 import { ContextMenu2 } from "@blueprintjs/popover2";
 import BoardMenu from '../../components/BoardMenu'
@@ -19,10 +18,12 @@ const PageContainer = styled.div<IthemeProp>`
     flex-direction: row;
 `
 const SideContainer = styled.div`
-    width: 20vw;
+    width: 22vw;
+    max-width: 330px;
+    min-width: 260px;
 `
 const MainContainer = styled.div`
-    width: calc(100% - 20vw);
+    /* width: calc(100% - 20vw); */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,7 +32,7 @@ const MainContainer = styled.div`
     border: 1px solid ${props => props.theme.background};
 
     &:hover {
-        border: 1px solid ${props => props.theme.cellHover};
+        border: 1px solid ${props => props.theme.cellHover  + props.theme.highlightTransparency};
     }
 `
 const ResizedContextMenu = styled(ContextMenu2)`
@@ -46,10 +47,7 @@ type GameProps = {
 
 const Game = ({ loadedBoard, isLoading }: GameProps) => {
     const {
-        speed,
-        isPlaying,
         toggleState,
-        iterateOnce,
         setLoadedBoard
     } = useGameContext()
 
@@ -57,12 +55,8 @@ const Game = ({ loadedBoard, isLoading }: GameProps) => {
         setLoadedBoard(loadedBoard)
     }, [loadedBoard, setLoadedBoard])
 
-    useInterval(() => {
-        iterateOnce()
-    }, isPlaying ? (1000 / speed) : null)
-
-    const hotKeysConfig = useGameHotkeysConfig()
-    const { handleKeyDown, handleKeyUp } = useHotkeys(hotKeysConfig)
+    const { hotkeysConfig } = useGameHotkeysConfig()
+    const { handleKeyDown, handleKeyUp } = useHotkeys(hotkeysConfig)
 
     return (
         <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>

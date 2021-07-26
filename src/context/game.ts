@@ -10,7 +10,7 @@ import { getGameLink } from '../utils/url'
 import { useThemeContext } from './theme'
 import { buildGenericContext } from './genericContext';
 import { saveBoardToLocalStorage, useSavedBoardsContext } from './savedBoards';
-import { default_saved_board } from '../utils/constants';
+import { default_saved_board, MAX_NAME_LENGTH } from '../utils/constants';
 
 export const ToggleCellState = createContext((col: number, row: number) => {console.log('Not yet configured')})
 
@@ -26,6 +26,10 @@ export const useGame = () => {
     const [name, setName] = useState('')
     const [loadedBoard, setLoadedBoard] = useState<ISavedBoard>()
     const history = useHistory()
+
+    const handleName = (newName: string) => {
+        setName(newName.substring(0, MAX_NAME_LENGTH))
+    }
 
     const toggleState = (col: number, row: number) : void => {
         if (Array.isArray(content)) {
@@ -83,8 +87,9 @@ export const useGame = () => {
         }
     }
 
-    const getShareableLink = () => {
-        const link = getGameLink(new Board(null, content, name))
+    const getShareableLink = (board?: boardData) => {
+        const toConvert = board ?? content
+        const link = getGameLink(new Board(null, toConvert, name))
         navigator.clipboard.writeText(link)
         showToast('Link copied to clipboard.', 'primary')
     }
@@ -118,7 +123,7 @@ export const useGame = () => {
         isPlaying, setIsPlaying,
         iterationCount, setIterationCount,
         highlightNew: !!highlightNew, setHighlightNew,
-        name, setName,
+        name, setName: handleName,
         toggleState,
         iterateOnce,
         resetBoard,
@@ -155,6 +160,7 @@ export const useGameHotkeysConfig = () => {
     const handleSave = useCallback(() => {
         saveBoard(new Board(null, content, name))
     }, [saveBoard, content, name])
+
 
     const hotkeysConfig = useMemo<HotkeyConfig[]>(() => ([
         {
@@ -209,7 +215,7 @@ export const useGameHotkeysConfig = () => {
             combo: 'shift + d',
             global: true,
             label: "Share board",
-            onKeyDown: getShareableLink
+            onKeyDown: getShareableLink as () => void
         },
     // eslint-disable-next-line
     ]), [
@@ -225,5 +231,5 @@ export const useGameHotkeysConfig = () => {
         toggleTheme
     ])
 
-    return hotkeysConfig
+    return { hotkeysConfig }
 }

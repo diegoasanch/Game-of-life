@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { cellContent } from '../../types/cells';
-import { ToggleCellState } from '../../context/game'
+import { ToggleCellState, useGameContext } from '../../context/game'
 import { useThemeContext } from '../../context/theme'
 
 
@@ -28,12 +28,26 @@ type CellProps = {
 }
 
 const Cell = ({ cellData, highlightNew }: CellProps ) => {
-    const toggleCell = useContext(ToggleCellState)
     const { theme } = useThemeContext()
     const [cellColor, setCellColor] = useState<CellColors>({ background: theme.cellDead, hoverBorder: theme.cellHover })
+    const toggleCell = useContext(ToggleCellState)
+    const { isClickOnBoard } = useGameContext()
+    const [wasClickedBefore, setWasClickedBefore] = useState(false)
 
     const handleClick = () => {
         toggleCell(cellData.column, cellData.row)
+    }
+
+    const handleMouseOver = () => {
+        // Only toggle on the first call
+        if (isClickOnBoard && !wasClickedBefore) {
+            handleClick()
+            setWasClickedBefore(true)
+        }
+    }
+
+    const handleMouseLeave = () => {
+        setWasClickedBefore(false)
     }
 
     useEffect(() => {
@@ -56,6 +70,8 @@ const Cell = ({ cellData, highlightNew }: CellProps ) => {
 
     return (
         <StyledCell
+            onMouseEnter={handleMouseOver}
+            onMouseLeave={handleMouseLeave}
             {...cellColor}
             // cellColor={getCellColor()}
             onClick={handleClick}

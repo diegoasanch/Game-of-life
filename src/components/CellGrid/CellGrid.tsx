@@ -50,11 +50,23 @@ interface Iprops {
 const CellGrid = ({ isLoading }: Iprops) => {
     const {
         content: rows,
-        highlightNew
+        highlightNew,
+        setIsClickOnBoard
     } = useGameContext()
 
+    const handleClick = () => {
+        setIsClickOnBoard(true)
+    }
+
+    const handleClickLeave = () => {
+        setIsClickOnBoard(false)
+    }
+
     return (
-        <Container>
+        <Container
+            onMouseDown={handleClick}
+            onMouseUp={handleClickLeave}
+        >
             { isLoading &&
                 <>
                     <H1>Loading...</H1>

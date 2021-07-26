@@ -25,6 +25,7 @@ export const useGame = () => {
     const [highlightNew, setHighlightNew] = useLocalStorage('highlightNew', false)
     const [name, setName] = useState('')
     const [loadedBoard, setLoadedBoard] = useState<ISavedBoard>()
+    const [isClickOnBoard, setIsClickOnBoard] = useState(false)
     const history = useHistory()
 
     const handleName = (newName: string) => {
@@ -33,7 +34,6 @@ export const useGame = () => {
 
     const toggleState = (col: number, row: number) : void => {
         if (Array.isArray(content)) {
-            console.log(`Toggling cell: [${row}][${col}]`)
             const copiedContent = deep_copy(content)
 
             copiedContent[row][col].alive = !copiedContent[row][col].alive
@@ -134,7 +134,8 @@ export const useGame = () => {
         handleSave,
         getShareableLink,
         initializeBoard,
-        loadedBoard, setLoadedBoard
+        loadedBoard, setLoadedBoard,
+        isClickOnBoard, setIsClickOnBoard
     }
 }
 

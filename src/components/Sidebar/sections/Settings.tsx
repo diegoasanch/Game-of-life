@@ -1,4 +1,4 @@
-import { Alignment, Button, ButtonGroup, Card, Label, Position, Switch } from "@blueprintjs/core"
+import { Alignment, Button, ButtonGroup, Card, Icon, Label, Position, Switch } from "@blueprintjs/core"
 import { Tooltip2 } from "@blueprintjs/popover2"
 import styled from "styled-components"
 import { useGameContext } from "../../../context/game"
@@ -101,7 +101,14 @@ export const Settings = () => {
             </Label>
 
             <ButtonGroup large>
-                <Tooltip2 content={`${isPlaying ? 'Stop': 'Start'} iterating`} position={Position.TOP}>
+                <Tooltip2
+                    position={Position.TOP}
+                    content={
+                        <>
+                            <code>P</code> {isPlaying ? 'Stop': 'Start'} iterating
+                        </>
+                    }
+                >
                     <Button
                         text={isPlaying ? "Pause" : "Play"}
                         icon={isPlaying ? "pause" : "play"}
@@ -109,7 +116,17 @@ export const Settings = () => {
                         onClick={togglePlaying}
                     />
                 </Tooltip2>
-                <Tooltip2 content="Step-by-step" position={Position.TOP}>
+                <Tooltip2
+                    position={Position.TOP}
+                    content={
+                        <>
+                            <code>
+                                <Icon icon="arrow-right" />
+                            </code>&nbsp;
+                            Step-by-step
+                        </>
+                    }
+                >
                     <Button
                         rightIcon="step-forward"
                         onClick={handleClick}
@@ -119,20 +136,50 @@ export const Settings = () => {
 
             </ButtonGroup>
             <ButtonGroup>
-                <Tooltip2 content="Reset board" intent="danger" position={Position.TOP}>
+                <Tooltip2
+                    intent="danger"
+                    position={Position.TOP}
+                    content={
+                        <>
+                            <code>
+                                shift + r
+                            </code>&nbsp;
+                            Reset board
+                        </>
+                    }
+                >
                     <Button
                         onClick={resetBoard}
                         icon="reset"
                         intent="danger"
                     />
                 </Tooltip2>
-                <Tooltip2 content="Clear board" position={Position.TOP}>
+                <Tooltip2
+                    position={Position.TOP}
+                    content={
+                        <>
+                            <code>
+                                shift + c
+                            </code>&nbsp;
+                            Clear board
+                        </>
+                    }
+                >
                     <Button
                         onClick={clearBoard}
                         icon="eraser"
                     />
                 </Tooltip2>
-                <Tooltip2 content="Randomize cells" position={Position.TOP}>
+                <Tooltip2
+                    position={Position.TOP}
+                    content={
+                        <>  <code>
+                                shift + n
+                            </code>&nbsp;
+                            Randomize cells
+                        </>
+                    }
+                >
                     <Button
                         text="Random"
                         onClick={randomizeBoard}

@@ -94,7 +94,13 @@ export const SavedBoardsInner = () => {
                 startOpen
                 Component={
                     <>
-                        { boards.length > 0 && boards.map(board => <BoardItem key={"saved_board_" + board.name} {...board} />)}
+                        { boards.length > 0 && boards.map(board => (
+                            <BoardItem
+                                isActive={board.name === name}
+                                key={"saved_board_" + board.name}
+                                {...board}
+                            />
+                        ))}
                         { !boards.length && (
                             <Callout intent="primary">
                                 <H4>No saved boards...</H4>

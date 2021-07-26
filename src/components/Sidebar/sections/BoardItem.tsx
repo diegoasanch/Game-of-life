@@ -6,8 +6,9 @@ import styled from "styled-components"
 import { useGameContext } from '../../../context/game';
 import { useSavedBoardsContext } from '../../../context/savedBoards';
 import { ISavedBoard } from "../../../types/cells"
+import { getDateLabel } from '../../../utils/dates';
 
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card)<BoardItemProps>`
     width: 100%;
     padding: .5em;
     padding-left: .8em;
@@ -15,6 +16,8 @@ const StyledCard = styled(Card)`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    border: ${({ isActive, theme }) => isActive ? ('1.5px solid ' + theme.cellHover) : ''};
 
     .bp3-button-group {
         opacity: .4;
@@ -36,6 +39,7 @@ const StyledCard = styled(Card)`
 const StyledName = styled.div`
     display: flex;
     flex-direction: column;
+    width: 100%;
 
     h6 {
         margin: .2em 0;
@@ -51,12 +55,20 @@ const Row = styled.div`
     justify-content: flex-start;
     align-items: baseline;
 `
+const DetailsRow = styled(Row)`
+    width: 90%;
+    justify-content: space-between;
+`
 
 const StyledEditableText = styled(EditableText)`
     width: ${props => Math.max(props.value?.length ?? 0, 5) + 'ch'};
 `
 
-export const BoardItem = ({ name, cols, rows, board_content }: ISavedBoard) => {
+type BoardItemProps = {
+    isActive?: boolean
+}
+
+export const BoardItem = ({ name, cols, rows, board_content, edited, isActive }: ISavedBoard & BoardItemProps) => {
     const { goToSaved, deleteBoard, renameBoard } = useSavedBoardsContext()
     const { getShareableLink } = useGameContext()
     const [localName, setLocalName] = useState(name)
@@ -83,7 +95,7 @@ export const BoardItem = ({ name, cols, rows, board_content }: ISavedBoard) => {
     }, 500, [localName, renameBoard])
 
     return (
-        <StyledCard interactive>
+        <StyledCard interactive isActive={isActive}>
             <StyledName>
                 <Row>
                     <StyledEditableText
@@ -95,9 +107,14 @@ export const BoardItem = ({ name, cols, rows, board_content }: ISavedBoard) => {
                     />
                     <Icon icon="edit" intent="primary" className="editIcon" iconSize={13} />
                 </Row>
-                <small className="bp3-text-muted">
-                    {rows} x { cols}
-                </small>
+                <DetailsRow>
+                    <small className="bp3-text-muted">
+                        {rows} x {cols}
+                    </small>
+                    <small className="bp3-text-muted">
+                        {getDateLabel(edited)}
+                    </small>
+                </DetailsRow>
             </StyledName>
 
             <ButtonGroup minimal>

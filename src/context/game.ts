@@ -10,7 +10,7 @@ import { getGameLink } from '../utils/url'
 import { useThemeContext } from './theme'
 import { buildGenericContext } from './genericContext';
 import { saveBoardToLocalStorage, useSavedBoardsContext } from './savedBoards';
-import { default_saved_board } from '../utils/constants';
+import { default_saved_board, MAX_NAME_LENGTH } from '../utils/constants';
 
 export const ToggleCellState = createContext((col: number, row: number) => {console.log('Not yet configured')})
 
@@ -26,6 +26,10 @@ export const useGame = () => {
     const [name, setName] = useState('')
     const [loadedBoard, setLoadedBoard] = useState<ISavedBoard>()
     const history = useHistory()
+
+    const handleName = (newName: string) => {
+        setName(newName.substring(0, MAX_NAME_LENGTH))
+    }
 
     const toggleState = (col: number, row: number) : void => {
         if (Array.isArray(content)) {
@@ -119,7 +123,7 @@ export const useGame = () => {
         isPlaying, setIsPlaying,
         iterationCount, setIterationCount,
         highlightNew: !!highlightNew, setHighlightNew,
-        name, setName,
+        name, setName: handleName,
         toggleState,
         iterateOnce,
         resetBoard,

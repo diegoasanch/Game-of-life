@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSavedBoardsContext } from '../../../context/savedBoards';
 import { SidebarItemContainer } from './styles';
 import styled from 'styled-components';
 import { BoardItem } from './BoardItem';
-import { Icon, InputGroup, FormGroup, Button, Card, Callout, H4 } from "@blueprintjs/core";
+import { Icon, InputGroup, FormGroup, Button, Card, Callout, H4, Position } from "@blueprintjs/core";
 import { useGameContext } from '../../../context/game';
 import { Board } from '../../Models/game';
 import { SidebarSection } from './SidebarSection';
+import { Tooltip2 } from '@blueprintjs/popover2';
 
 const StyledSidebarItemContainer = styled(SidebarItemContainer)`
     align-items: flex-start;
@@ -45,6 +46,8 @@ const StyledCard = styled(Card)`
 export const SavedBoardsInner = () => {
     const { boards, saveBoard } = useSavedBoardsContext()
     const { name, content, setName } = useGameContext()
+    const [isNameInputFocused, setIsNameInputFocused] = useState(false)
+
 
     const handleSave = () => {
         saveBoard(new Board(null, content, name))
@@ -59,6 +62,16 @@ export const SavedBoardsInner = () => {
         handleSave()
     }
 
+    const handleInputFocus = () => {
+        console.log('Name input focus')
+        setIsNameInputFocused(true)
+    }
+
+    const handleInputBlur = () => {
+        console.log('Name input blur')
+        setIsNameInputFocused(false)
+    }
+
     return (
         <>
             <StyledCard>
@@ -67,25 +80,44 @@ export const SavedBoardsInner = () => {
                     labelFor="name-input"
                     labelInfo={
                         <>
-                            (<Icon icon="key-shift" />S)
+                            { isNameInputFocused ?
+                                <span>
+                                    enter<Icon icon="key-enter" />
+                                </span>
+                            :
+                                <span>
+                                    <Icon icon="key-shift" />shift + S
+                                </span>
+                            }
                         </>
                     }
                 >
                     <form onSubmit={handleFormSubmit}>
                         <InputGroup
                             onChange={handleNameChange}
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                             value={name}
                             placeholder="untitled_board"
                             id="name-input"
                         />
                     </form>
-                    <Button
-                        className="save-btn"
-                        text={"Save"}
-                        icon="floppy-disk"
-                        onClick={handleSave}
-                        fill
-                    />
+                    <Tooltip2
+                        position={Position.TOP}
+                        content={
+                            <span>
+                                <Icon icon="key-shift" />shift + S
+                            </span>
+                        }
+                    >
+                        <Button
+                            className="save-btn"
+                            text={"Save"}
+                            icon="floppy-disk"
+                            onClick={handleSave}
+                            fill
+                        />
+                    </Tooltip2>
 
                 </StyledForm>
             </StyledCard>

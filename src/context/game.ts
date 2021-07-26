@@ -56,12 +56,12 @@ export const useGame = () => {
     const resetBoard = () => {
         setContent(resetCheckpoint)
         setIterationCount(0)
-        showToast('Reset board', 'primary') // TODO: maybe use this in the game and leave only logic here
+        showToast('Reset board', 'primary')
     }
 
     const randomizeBoard = () => {
         initializeBoard(rowCount, colCount, true, false)
-        showToast('Randomized cells', 'primary') // TODO: Same with this toast
+        showToast('Randomized cells', 'primary')
     }
     const clearBoard = () => {
         initializeBoard(rowCount, colCount, false, false)
@@ -83,7 +83,7 @@ export const useGame = () => {
             showToast(`Saved board: ${name}`, 'success')
         }
         else {
-            alert("Invalid name")
+            showToast("Invalid name", 'danger')
         }
     }
 

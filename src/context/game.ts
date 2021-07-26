@@ -25,6 +25,7 @@ export const useGame = () => {
     const [highlightNew, setHighlightNew] = useLocalStorage('highlightNew', false)
     const [name, setName] = useState('')
     const [loadedBoard, setLoadedBoard] = useState<ISavedBoard>()
+    const [isClickOnBoard, setIsClickOnBoard] = useState(false)
     const history = useHistory()
 
     const handleName = (newName: string) => {
@@ -33,7 +34,6 @@ export const useGame = () => {
 
     const toggleState = (col: number, row: number) : void => {
         if (Array.isArray(content)) {
-            console.log(`Toggling cell: [${row}][${col}]`)
             const copiedContent = deep_copy(content)
 
             copiedContent[row][col].alive = !copiedContent[row][col].alive
@@ -56,12 +56,12 @@ export const useGame = () => {
     const resetBoard = () => {
         setContent(resetCheckpoint)
         setIterationCount(0)
-        showToast('Reset board', 'primary') // TODO: maybe use this in the game and leave only logic here
+        showToast('Reset board', 'primary')
     }
 
     const randomizeBoard = () => {
         initializeBoard(rowCount, colCount, true, false)
-        showToast('Randomized cells', 'primary') // TODO: Same with this toast
+        showToast('Randomized cells', 'primary')
     }
     const clearBoard = () => {
         initializeBoard(rowCount, colCount, false, false)
@@ -83,7 +83,7 @@ export const useGame = () => {
             showToast(`Saved board: ${name}`, 'success')
         }
         else {
-            alert("Invalid name")
+            showToast("Invalid name", 'danger')
         }
     }
 
@@ -134,7 +134,8 @@ export const useGame = () => {
         handleSave,
         getShareableLink,
         initializeBoard,
-        loadedBoard, setLoadedBoard
+        loadedBoard, setLoadedBoard,
+        isClickOnBoard, setIsClickOnBoard
     }
 }
 

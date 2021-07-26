@@ -69,7 +69,7 @@ function SharedGame() {
             }
         }
         call_create()
-
+    // eslint-disable-next-line
     }, [dimensions, content, name])
 
     return (

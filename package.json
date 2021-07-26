@@ -1,6 +1,6 @@
 {
   "name": "game_of_life",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "homepage": "http://diegoasanch.github.io/Game-of-life",
   "dependencies": {

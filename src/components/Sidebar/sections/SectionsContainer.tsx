@@ -54,7 +54,7 @@ export const SectionsContainer = () => {
     return (
         <StyledSectionsContainer>
             { sidebarSections.map(section => (
-                <SidebarSection {...section} />
+                <SidebarSection key={section.name} {...section}  />
             ))}
         </StyledSectionsContainer>
     )

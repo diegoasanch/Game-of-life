@@ -1,21 +1,38 @@
 use crate::cell::Cell;
+use rand::random;
 use std::convert::TryInto;
+
+const SURVIVE_MIN: usize = 2;
+const SURVIVE_MAX: usize = 3;
+const SPAWN: usize = 3;
 
 #[derive(Debug)]
 pub struct Board {
     cells: Vec<Cell>,
     width: usize,
     height: usize,
+    age: u32,
 }
 
 impl Board {
     pub fn new(width: usize, height: usize) -> Board {
-        let cells = vec![Cell::new(); width * height];
+        let cells = vec![Cell::default(); width * height];
         Board {
             cells,
             width,
             height,
+            age: 0,
         }
+    }
+
+    pub fn random(width: usize, height: usize) -> Board {
+        let mut board = Board::new(width, height);
+        for x in 0..width {
+            for y in 0..height {
+                board.set(x, y, Cell::new(random(), 0));
+            }
+        }
+        board
     }
 
     pub fn from_matrix(matrix: &Vec<Vec<bool>>) -> Board {
@@ -35,6 +52,7 @@ impl Board {
             cells,
             width,
             height,
+            age: 0,
         }
     }
 
@@ -44,6 +62,14 @@ impl Board {
 
     pub fn height(&self) -> usize {
         self.height
+    }
+
+    pub fn age(&self) -> u32 {
+        self.age
+    }
+
+    pub fn set_age(&mut self, age: u32) {
+        self.age = age;
     }
 
     pub fn get(&self, x: usize, y: usize) -> Option<&Cell> {
@@ -60,7 +86,7 @@ impl Board {
         }
     }
 
-    pub fn alive_at(&self, x: usize, y: usize) -> bool {
+    pub fn is_alive(&self, x: usize, y: usize) -> bool {
         self.get(x as usize, y as usize)
             .map_or(false, |c| c.alive())
     }
@@ -78,7 +104,7 @@ impl Board {
                 if let (Ok(neighbor_x), Ok(neighbor_y)) =
                     (self.clean_x(x as i32 + i), self.clean_y(y as i32 + j))
                 {
-                    if self.alive_at(neighbor_x, neighbor_y) {
+                    if self.is_alive(neighbor_x, neighbor_y) {
                         count += 1;
                     }
                 }
@@ -87,17 +113,40 @@ impl Board {
         count
     }
 
-    fn next_generation(&self) -> Self {
-        let mut next = Board::new(self.width, self.height);
+    pub fn next_generation(&self) -> Self {
+        let mut next_board = Board::new(self.width, self.height);
+        next_board.set_age(self.age + 1);
         for x in 0..self.width {
             for y in 0..self.height {
-                let current_cell = self.get(x, y).map_or(Cell::new(), |c| *c);
+                let current_cell = self.get(x, y).map_or(Cell::default(), |c| *c);
                 let neighbors = self.count_neighbors(x, y);
+
+                let next_cell = if current_cell.alive() {
+                    if neighbors >= SURVIVE_MIN && neighbors <= SURVIVE_MAX {
+                        Cell::new(true, current_cell.age() + 1)
+                    } else {
+                        Cell::new(false, 0)
+                    }
+                } else {
+                    if neighbors == SPAWN {
+                        Cell::new(true, 0)
+                    } else {
+                        Cell::new(false, 0)
+                    }
+                };
+
+                next_board.set(x, y, next_cell);
             }
         }
-        next
+        next_board
     }
 
+    /// Converts the given number `x` to a usize.
+    ///
+    /// Error cases:
+    /// - `x` is negative
+    /// - `x` cannot be converted to a usize
+    /// - `x` is greater than the width of the board
     fn clean_x<T: TryInto<usize> + PartialOrd + From<u8> + Copy>(
         &self,
         x: T,
@@ -110,6 +159,12 @@ impl Board {
         }
     }
 
+    /// Converts the given number `y` to a usize.
+    ///
+    /// Error cases:
+    /// - `y` is negative
+    /// - `y` cannot be converted to a usize
+    /// - `y` is greater than the width of the board
     fn clean_y<T: TryInto<usize> + PartialOrd + From<u8> + Copy>(
         &self,
         y: T,
@@ -181,7 +236,26 @@ mod tests {
     }
 
     #[test]
-    fn counts_neighbors() {
+    fn count_neighbors1x1() {
+        let matrix = vec![vec![true]];
+
+        let board = Board::from_matrix(&matrix);
+        assert_eq!(board.count_neighbors(0, 0), 0);
+    }
+
+    #[test]
+    fn count_neighbors2x2() {
+        let matrix = vec![vec![true, false], vec![false, true]];
+
+        let board = Board::from_matrix(&matrix);
+        assert_eq!(board.count_neighbors(0, 0), 1);
+        assert_eq!(board.count_neighbors(1, 0), 2);
+        assert_eq!(board.count_neighbors(0, 1), 2);
+        assert_eq!(board.count_neighbors(1, 1), 1);
+    }
+
+    #[test]
+    fn counts_neighbors_3x3() {
         let matrix = vec![
             vec![false, false, false],
             vec![true, false, false],

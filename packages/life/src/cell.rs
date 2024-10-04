@@ -5,7 +5,11 @@ pub struct Cell {
 }
 
 impl Cell {
-    pub fn new() -> Cell {
+    pub fn new(alive: bool, age: u32) -> Cell {
+        Cell { alive, age }
+    }
+
+    pub fn default() -> Cell {
         Cell {
             alive: false,
             age: 0,
@@ -27,6 +31,10 @@ impl Cell {
     pub fn alive(&self) -> bool {
         self.alive
     }
+
+    pub fn age(&self) -> u32 {
+        self.age
+    }
 }
 
 #[cfg(test)]
@@ -35,7 +43,7 @@ mod tests {
 
     #[test]
     fn creates_new_cell() {
-        let cell = Cell::new();
+        let cell = Cell::default();
         assert_eq!(cell.alive(), false);
         assert_eq!(cell.age, 0);
     }
@@ -56,7 +64,7 @@ mod tests {
 
     #[test]
     fn sets_alive() {
-        let mut cell = Cell::new();
+        let mut cell = Cell::default();
         cell.set_alive(true);
         assert_eq!(cell.alive(), true);
         assert_eq!(cell.age, 1);

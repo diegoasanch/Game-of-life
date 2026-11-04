@@ -105,7 +105,7 @@ export const Settings = () => {
                     position={Position.TOP}
                     content={
                         <>
-                            <code>P</code> {isPlaying ? 'Stop': 'Start'} iterating
+                            <code>P</code> / <code>Space</code> {isPlaying ? 'Stop': 'Start'} iterating
                         </>
                     }
                 >

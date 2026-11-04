@@ -171,6 +171,13 @@ export const useGameHotkeysConfig = () => {
             onKeyDown: togglePlaying
         },
         {
+            combo: 'space',
+            global: true,
+            label: "Play",
+            preventDefault: true,
+            onKeyDown: togglePlaying
+        },
+        {
             combo: 'right',
             global: true,
             label: "Iterate once",

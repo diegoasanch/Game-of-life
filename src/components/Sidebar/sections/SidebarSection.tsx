@@ -15,7 +15,7 @@ export type SidebarSectionProps = {
     Component: React.ReactNode
 }
 
-const StyledCollapse = styled(Collapse)`
+const StyledCollapse = styled(Collapse)<{ children?: React.ReactNode }>`
     padding-left: .5em;
 `
 

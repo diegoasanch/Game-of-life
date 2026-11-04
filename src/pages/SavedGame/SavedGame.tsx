@@ -27,7 +27,7 @@ function SavedGame() {
                     setSavedBoard(default_saved_board)
                     AppToaster.show({ message: `Couldn't load board "${name}"`, intent: "danger"})
                 }
-            } catch (error) {
+            } catch {
                 AppToaster.show({ message: "Error loading the board.", intent: 'danger'})
             } finally {
                 setIsLoading(false)

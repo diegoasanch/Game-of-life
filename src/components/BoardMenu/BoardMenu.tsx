@@ -5,7 +5,7 @@ import { useGameContext } from '../../context/game';
 import { useSavedBoardsContext } from '../../context/savedBoards';
 import { Board } from '../Models/game';
 
-const StyledForm = styled(FormGroup)`
+const StyledForm = styled(FormGroup)<{ children?: React.ReactNode }>`
     padding: 0 0 5px 5px;
     width: calc(100% - 10px);
     margin: 0;

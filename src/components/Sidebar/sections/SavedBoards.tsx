@@ -23,7 +23,7 @@ export const SavedBoards = () => {
     )
 }
 
-const StyledForm = styled(FormGroup)`
+const StyledForm = styled(FormGroup)<{ children?: React.ReactNode }>`
     padding: 0 0 5px 5px;
     width: calc(100% - 10px);
     margin: 0;
@@ -57,7 +57,7 @@ export const SavedBoardsInner = () => {
         setName((event.target as HTMLInputElement).value)
     }
 
-    const handleFormSubmit = (event: any) => {
+    const handleFormSubmit = (event: React.FormEvent) => {
         event.preventDefault()
         handleSave()
     }

@@ -48,16 +48,16 @@ export const Settings = () => {
         toggleHighlightNew,
     } = useGameContext()
 
-    const handleColInput: numInputCallback = (valueAsNumber, valueAsString, innputElement) => {
+    const handleColInput: numInputCallback = (valueAsNumber) => {
         setColCount(valueAsNumber)
     }
-    const handleRowInput: numInputCallback = (valueAsNumber, valueAsString, innputElement) => {
+    const handleRowInput: numInputCallback = (valueAsNumber) => {
         setRowCount(valueAsNumber)
     }
     const handleSpeed: SetNumValue = (value) => {
         setSpeed(value)
     }
-    const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    const handleClick = () => {
         iterateOnce()
     }
 
@@ -105,7 +105,7 @@ export const Settings = () => {
                     position={Position.TOP}
                     content={
                         <>
-                            <code>P</code> {isPlaying ? 'Stop': 'Start'} iterating
+                            <code>P</code> / <code>Space</code> {isPlaying ? 'Stop': 'Start'} iterating
                         </>
                     }
                 >

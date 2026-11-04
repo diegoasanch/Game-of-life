@@ -12,7 +12,7 @@ import { buildGenericContext } from './genericContext';
 import { saveBoardToLocalStorage, useSavedBoardsContext } from './savedBoards';
 import { default_saved_board, MAX_NAME_LENGTH } from '../utils/constants';
 
-export const ToggleCellState = createContext((col: number, row: number) => {console.log('Not yet configured')})
+export const ToggleCellState = createContext<(col: number, row: number) => void>(() => {console.log('Not yet configured')})
 
 export const useGame = () => {
     const [colCount, setColCount] = useState(40)
@@ -168,6 +168,13 @@ export const useGameHotkeysConfig = () => {
             combo: 'p',
             global: true,
             label: "Play",
+            onKeyDown: togglePlaying
+        },
+        {
+            combo: 'space',
+            global: true,
+            label: "Play",
+            preventDefault: true,
             onKeyDown: togglePlaying
         },
         {

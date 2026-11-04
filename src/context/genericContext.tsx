@@ -1,10 +1,10 @@
-import { Context, createContext, useContext } from 'react'
+import { Context, createContext, ReactNode, useContext } from 'react'
 
-export const buildGenericContext = <T extends unknown>(
+export const buildGenericContext = <T,>(
 	getData: () => T
-): [({ children }: any) => JSX.Element, () => T, Context<T>] => {
+): [({ children }: { children: ReactNode }) => JSX.Element, () => T, Context<T>] => {
 	const HookContext = createContext<T>({} as T)
-	const provider = ({ children }: any) => {
+	const provider = ({ children }: { children: ReactNode }) => {
 		const comonData = getData()
 
 		return <HookContext.Provider value={comonData}>{children}</HookContext.Provider>

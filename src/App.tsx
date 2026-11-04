@@ -59,7 +59,7 @@ function App() {
 
 export default App;
 
-const StyledComponentsThemeProvider = ({ children }: any) => {
+const StyledComponentsThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const { theme, isDark, toggleTheme } = useThemeContext()
 
   return (
@@ -69,7 +69,7 @@ const StyledComponentsThemeProvider = ({ children }: any) => {
   )
 }
 
-const ThemedPageContainer = ({ children }: any) => {
+const ThemedPageContainer = ({ children }: { children: React.ReactNode }) => {
   const { isDark } = useThemeContext()
 
   return (

@@ -96,7 +96,7 @@ export const board_to_saved_format = (to_save: IBoard): ISavedBoard => (
 export const saveBoardToLocalStorage = (to_save: ISavedBoard): void => {
     const storage_key = saved_label(to_save.name)
 
-    if (window.localStorage.hasOwnProperty(storage_key)) {
+    if (window.localStorage.getItem(storage_key) !== null) {
         to_save.edited = new Date();
     }
     const serialized_board = JSON.stringify(to_save)

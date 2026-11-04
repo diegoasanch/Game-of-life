@@ -55,7 +55,7 @@ export const nextCycle = (board: boardData) : boardData => {
     return copied_data
 }
 
-export const deep_copy = (to_copy: any): any => {
+export const deep_copy = <T,>(to_copy: T): T => {
     return JSON.parse(JSON.stringify(to_copy))
 }
 
@@ -132,8 +132,8 @@ export const saved_label = (name: string): string => `saved/${name.replaceAll(' 
 
 export const getBoard = (name: string): Promise<ISavedBoard | undefined> => {
 
-    return new Promise((resolve, reject) => {
-        if (window.localStorage.hasOwnProperty(saved_label(name))) { // saved entry
+    return new Promise((resolve) => {
+        if (window.localStorage.getItem(saved_label(name)) !== null) { // saved entry
             console.log(`Getting ${name} board from localstorage`)
             const board_string = window.localStorage.getItem(saved_label(name)) ?? '{}'
             const parsed_board = JSON.parse(board_string)

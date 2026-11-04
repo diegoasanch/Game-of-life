@@ -65,7 +65,6 @@ const Cell = ({ cellData, highlightNew }: CellProps ) => {
             }
         }
         setCellColor(colors)
-    // eslint-disable-next-line
     }, [cellData, highlightNew, theme])
 
     return (

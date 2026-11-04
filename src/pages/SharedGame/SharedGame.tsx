@@ -35,7 +35,7 @@ function SharedGame() {
                     return resolve()
                 }
                 throw new Error('invalid board')
-            } catch (error) {
+            } catch {
                 return reject()
             }
         })
@@ -61,7 +61,7 @@ function SharedGame() {
             setIsLoading(true)
             try {
                 await createBoard(parsed_rows, parsed_cols, content)
-            } catch (error) {
+            } catch {
                 setSavedBoard(default_saved_board)
                 notifyInvalid()
             } finally {
